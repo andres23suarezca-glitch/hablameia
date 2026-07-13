@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Hablame.IA</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="login-wrapper" id="loginView">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="login-logo-icon">&#x1F4AC;</span>
+      <span>Hablame</span><span class="login-logo-dot"></span><span style="color:#F97316;">IA</span>
+    </div>
+    <p class="login-subtitle">Panel de administraci&oacute;n</p>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="loginEmail" required placeholder="admin@hablame.ia">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contrase&ntilde;a</label>
+        <input type="password" class="form-input" id="loginPassword" required placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+      </div>
+      <div id="loginError" style="display:none;padding:10px 14px;border-radius:10px;background:#FEE2E2;color:#DC2626;font-size:13px;font-weight:500;margin-bottom:16px;"></div>
+      <button type="submit" class="btn-admin btn-primary" style="width:100%;padding:14px;">Iniciar sesi&oacute;n</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="dashboard" id="dashboardView">
+  <header class="dash-header">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="dash-header-logo">
+        <span class="login-logo-icon" style="width:30px;height:30px;border-radius:8px;font-size:14px;">&#x1F4AC;</span>
+        Hablame.IA
+      </div>
+      <span class="dash-header-badge">Admin</span>
+    </div>
+    <div class="dash-header-actions">
+      <span class="dash-user" id="dashUser"></span>
+      <button class="btn-logout" id="logoutBtn">Cerrar sesi&oacute;n</button>
+    </div>
+  </header>
+
+  <div class="dash-tabs" id="dashTabs">
+    <button class="dash-tab active" data-tab="hero">&#x1F4DD; Hero</button>
+    <button class="dash-tab" data-tab="services">&#x1F3E2; Servicios</button>
+    <button class="dash-tab" data-tab="pricing">&#x1F4B0; Precios</button>
+    <button class="dash-tab" data-tab="courses">&#x1F393; Cursos</button>
+    <button class="dash-tab" data-tab="legal">&#x1F4C4; Legal</button>
+    <button class="dash-tab" data-tab="config">&#x2699;&#xFE0F; Config</button>
+  </div>
+
+  <!-- TAB: Hero -->
+  <div class="tab-content active" id="tab-hero">
+    <h2 class="tab-title">Hero</h2>
+    <p class="tab-desc">Edita el contenido principal que ve el visitante al entrar.</p>
+    <div class="edit-card">
+      <div class="form-group">
+        <label class="form-label">Kicker</label>
+        <input type="text" class="form-input" id="hero-kicker" value="Automatizaci&oacute;n con IA &middot; Pasto, Colombia">
+      </div>
+      <div class="form-group">
+        <label class="form-label">T&iacute;tulo principal</label>
+        <textarea class="form-textarea" id="hero-title" rows="3">Son las 11:42 PM. Tu cliente pregunta. &iquest;Qui&eacute;n responde?</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subt&iacute;tulo</label>
+        <textarea class="form-textarea" id="hero-subtitle" rows="2">Automatizaciones con inteligencia artificial para empresas + formaci&oacute;n para emprendedores que quieren monetizar con tecnolog&iacute;a.</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL imagen hero (opcional)</label>
+        <input type="url" class="form-input" id="hero-image" placeholder="https://ejemplo.com/hero.jpg">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Texto bot&oacute;n 1</label>
+          <input type="text" class="form-input" id="hero-btn1" value="Soluciones para empresas">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Texto bot&oacute;n 2</label>
+          <input type="text" class="form-input" id="hero-btn2" value="Cursos y formaci&oacute;n">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Servicios -->
+  <div class="tab-content" id="tab-services">
+    <h2 class="tab-title">Servicios</h2>
+    <p class="tab-desc">Administra las tarjetas de servicios que aparecen en la secci&oacute;n "Empresas".</p>
+    <div id="servicesList"></div>
+    <button class="btn-admin btn-outline-admin" id="addServiceBtn" style="margin-top:12px;">+ Agregar servicio</button>
+  </div>
+
+  <!-- TAB: Precios -->
+  <div class="tab-content" id="tab-pricing">
+    <h2 class="tab-title">Precios</h2>
+    <p class="tab-desc">Edita los 3 planes de automatizaci&oacute;n.</p>
+    <div id="pricingList"></div>
+  </div>
+
+  <!-- TAB: Cursos -->
+  <div class="tab-content" id="tab-courses">
+    <h2 class="tab-title">Cursos</h2>
+    <p class="tab-desc">Gestiona los cursos de formaci&oacute;n.</p>
+    <div id="coursesList"></div>
+    <button class="btn-admin btn-outline-admin" id="addCourseBtn" style="margin-top:12px;">+ Agregar curso</button>
+  </div>
+
+  <!-- TAB: Legal -->
+  <div class="tab-content" id="tab-legal">
+    <h2 class="tab-title">Legal</h2>
+    <p class="tab-desc">Contenido de las p&aacute;ginas legales (privacidad y t&eacute;rminos).</p>
+    <div class="edit-card">
+      <div class="form-group">
+        <label class="form-label">Pol&iacute;tica de privacidad</label>
+        <textarea class="form-textarea" id="legal-privacy" rows="12" placeholder="Contenido de la pol&iacute;tica de privacidad..."></textarea>
+      </div>
+    </div>
+    <div class="edit-card">
+      <div class="form-group">
+        <label class="form-label">T&eacute;rminos y condiciones</label>
+        <textarea class="form-textarea" id="legal-terms" rows="12" placeholder="Contenido de los t&eacute;rminos de uso..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Config -->
+  <div class="tab-content" id="tab-config">
+    <h2 class="tab-title">Configuraci&oacute;n</h2>
+    <p class="tab-desc">Datos de contacto y redes sociales.</p>
+    <div class="edit-card">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">N&uacute;mero WhatsApp</label>
+          <input type="text" class="form-input" id="config-whatsapp" value="573170731171" placeholder="573170731171">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email de contacto</label>
+          <input type="email" class="form-input" id="config-email" placeholder="hola@hablame.ia">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Instagram</label>
+          <input type="text" class="form-input" id="config-instagram" placeholder="@hablame.ia">
+        </div>
+        <div class="form-group">
+          <label class="form-label">TikTok</label>
+          <input type="text" class="form-input" id="config-tiktok" placeholder="@hablame.ia">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Facebook</label>
+        <input type="text" class="form-input" id="config-facebook" placeholder="hablame.ia">
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVE BAR -->
+  <div class="save-bar">
+    <span class="save-status" id="saveStatus"></span>
+    <button class="btn-admin btn-green" id="saveBtn">&#x1F4BE; Guardar cambios</button>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
