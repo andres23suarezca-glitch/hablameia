@@ -1,6 +1,6 @@
 /* ============================================================
    HABLAME.IA — Admin Panel Styles v2
-   Palette: #00C2A8 · #FF5A5F · #1A1A2E · #FAF7F2
+   Palette: #F97316 · #EF4444 · #1A1A2E · #FAF7F2
    ============================================================ */
 
 body {
@@ -27,8 +27,8 @@ body {
   padding: 40px 32px;
   border-radius: 24px;
   background: #fff;
-  box-shadow: 0 24px 48px -16px rgba(0,194,168,0.2);
-  border: 1px solid rgba(0,194,168,0.1);
+  box-shadow: 0 24px 48px -16px rgba(249,115,22,0.2);
+  border: 1px solid rgba(249,115,22,0.1);
 }
 .login-logo {
   display: flex;
@@ -46,7 +46,7 @@ body {
   justify-content: center;
   width: 40px; height: 40px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #00C2A8, #009988);
+  background: linear-gradient(135deg, #F97316, #EA580C);
   color: #fff;
   font-size: 20px;
 }
@@ -54,7 +54,7 @@ body {
   display: inline-block;
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: #00C2A8;
+  background: #F97316;
   margin: 0 2px;
 }
 .login-subtitle {
@@ -87,8 +87,8 @@ body {
   box-sizing: border-box;
 }
 .form-input:focus, .form-textarea:focus, .form-select:focus {
-  border-color: #00C2A8;
-  box-shadow: 0 0 0 3px rgba(0,194,168,0.12);
+  border-color: #F97316;
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.12);
   background: #fff;
 }
 .form-textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
@@ -109,11 +109,11 @@ body {
   transition: all 200ms ease;
 }
 .btn-primary {
-  background: linear-gradient(135deg, #00C2A8, #009988);
+  background: linear-gradient(135deg, #F97316, #EA580C);
   color: #fff;
-  box-shadow: 0 8px 20px -8px rgba(0,194,168,0.4);
+  box-shadow: 0 8px 20px -8px rgba(249,115,22,0.4);
 }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(0,194,168,0.5); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(249,115,22,0.5); }
 .btn-green {
   background: linear-gradient(90deg, #25D366, #128C7E);
   color: #fff;
@@ -125,7 +125,7 @@ body {
   border: 1.5px solid rgba(0,0,0,0.1);
   color: #6B6B6B;
 }
-.btn-outline-admin:hover { border-color: #00C2A8; color: #00C2A8; }
+.btn-outline-admin:hover { border-color: #F97316; color: #F97316; }
 .btn-danger {
   background: #FEE2E2;
   color: #DC2626;
@@ -162,8 +162,8 @@ body {
 .dash-header-badge {
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(0,194,168,0.1);
-  color: #00C2A8;
+  background: rgba(249,115,22,0.1);
+  color: #F97316;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -174,15 +174,15 @@ body {
 .btn-logout {
   padding: 8px 14px;
   border-radius: 8px;
-  background: rgba(255,90,95,0.08);
-  color: #FF5A5F;
+  background: rgba(239,68,68,0.08);
+  color: #EF4444;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   border: none;
   transition: background 200ms ease;
 }
-.btn-logout:hover { background: rgba(255,90,95,0.15); }
+.btn-logout:hover { background: rgba(239,68,68,0.15); }
 
 /* --- TABS --- */
 .dash-tabs {
@@ -205,10 +205,10 @@ body {
   white-space: nowrap;
   transition: all 200ms ease;
 }
-.dash-tab:hover { color: #00C2A8; }
+.dash-tab:hover { color: #F97316; }
 .dash-tab.active {
-  color: #00C2A8;
-  border-bottom-color: #00C2A8;
+  color: #F97316;
+  border-bottom-color: #F97316;
 }
 
 /* --- TAB CONTENT --- */

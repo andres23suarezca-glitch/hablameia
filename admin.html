@@ -17,7 +17,7 @@
   <div class="login-card">
     <div class="login-logo">
       <span class="login-logo-icon">&#x1F4AC;</span>
-      <span>Hablame</span><span class="login-logo-dot"></span><span style="color:#00C2A8;">IA</span>
+      <span>Hablame</span><span class="login-logo-dot"></span><span style="color:#F97316;">IA</span>
     </div>
     <p class="login-subtitle">Panel de administraci&oacute;n</p>
 
@@ -54,9 +54,8 @@
 
   <div class="dash-tabs" id="dashTabs">
     <button class="dash-tab active" data-tab="hero">&#x1F4DD; Hero</button>
-    <button class="dash-tab" data-tab="cupos">&#x1F525; Cupos</button>
+    <button class="dash-tab" data-tab="oferta">&#x1F525; Oferta</button>
     <button class="dash-tab" data-tab="services">&#x1F3E2; Servicios</button>
-    <button class="dash-tab" data-tab="pricing">&#x1F4B0; Precios</button>
     <button class="dash-tab" data-tab="courses">&#x1F393; Cursos</button>
     <button class="dash-tab" data-tab="testimonials">&#x2B50; Testimonios</button>
     <button class="dash-tab" data-tab="legal">&#x1F4C4; Legal</button>
@@ -87,29 +86,27 @@
     </div>
   </div>
 
-  <!-- TAB: Cupos -->
-  <div class="tab-content" id="tab-cupos">
-    <h2 class="tab-title">Cupos de implementaci&oacute;n</h2>
-    <p class="tab-desc">Banda de urgencia que aparece debajo del hero.</p>
+  <!-- TAB: Oferta -->
+  <div class="tab-content" id="tab-oferta">
+    <h2 class="tab-title">Banda de oferta</h2>
+    <p class="tab-desc">Mensaje de urgencia que aparece debajo del hero.</p>
     <div class="edit-card">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Mes/periodo</label>
-          <input type="text" class="form-input" id="cupos-mes" value="Agosto 2026">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Fecha de cierre</label>
-          <input type="text" class="form-input" id="cupos-fecha" value="31 de agosto">
-        </div>
+      <div class="form-group">
+        <label class="form-label">Texto de la oferta</label>
+        <input type="text" class="form-input" id="oferta-texto" value="NUESTRA OFERTA DE LANZAMIENTO EST&Aacute; A PUNTO DE FINALIZAR">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha de cierre</label>
+        <input type="text" class="form-input" id="oferta-fecha" value="31 de agosto" placeholder="31 de agosto">
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Cupos disponibles</label>
-          <input type="number" class="form-input" id="cupos-disponibles" value="11" min="0">
+          <label class="form-label">Cupos disponibles (academia)</label>
+          <input type="number" class="form-input" id="oferta-disponibles" value="3" min="0">
         </div>
         <div class="form-group">
           <label class="form-label">Cupos totales</label>
-          <input type="number" class="form-input" id="cupos-total" value="15" min="1">
+          <input type="number" class="form-input" id="oferta-total" value="15" min="1">
         </div>
       </div>
     </div>
@@ -121,13 +118,6 @@
     <p class="tab-desc">Administra las tarjetas de servicios.</p>
     <div id="servicesList"></div>
     <button class="btn-admin btn-outline-admin" id="addServiceBtn" style="margin-top:12px;">+ Agregar servicio</button>
-  </div>
-
-  <!-- TAB: Precios -->
-  <div class="tab-content" id="tab-pricing">
-    <h2 class="tab-title">Precios</h2>
-    <p class="tab-desc">Edita los 3 planes de automatizaci&oacute;n.</p>
-    <div id="pricingList"></div>
   </div>
 
   <!-- TAB: Cursos -->
