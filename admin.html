@@ -17,7 +17,7 @@
   <div class="login-card">
     <div class="login-logo">
       <span class="login-logo-icon">&#x1F4AC;</span>
-      <span>Hablame</span><span class="login-logo-dot"></span><span style="color:#F97316;">IA</span>
+      <span>Hablame</span><span class="login-logo-dot"></span><span style="color:#00C2A8;">IA</span>
     </div>
     <p class="login-subtitle">Panel de administraci&oacute;n</p>
 
@@ -54,9 +54,11 @@
 
   <div class="dash-tabs" id="dashTabs">
     <button class="dash-tab active" data-tab="hero">&#x1F4DD; Hero</button>
+    <button class="dash-tab" data-tab="cupos">&#x1F525; Cupos</button>
     <button class="dash-tab" data-tab="services">&#x1F3E2; Servicios</button>
     <button class="dash-tab" data-tab="pricing">&#x1F4B0; Precios</button>
     <button class="dash-tab" data-tab="courses">&#x1F393; Cursos</button>
+    <button class="dash-tab" data-tab="testimonials">&#x2B50; Testimonios</button>
     <button class="dash-tab" data-tab="legal">&#x1F4C4; Legal</button>
     <button class="dash-tab" data-tab="config">&#x2699;&#xFE0F; Config</button>
   </div>
@@ -68,28 +70,46 @@
     <div class="edit-card">
       <div class="form-group">
         <label class="form-label">Kicker</label>
-        <input type="text" class="form-input" id="hero-kicker" value="Automatizaci&oacute;n con IA &middot; Pasto, Colombia">
+        <input type="text" class="form-input" id="hero-kicker" value="HABLAME.IA &middot; Automatizaci&oacute;n con IA &middot; Colombia">
       </div>
       <div class="form-group">
-        <label class="form-label">T&iacute;tulo principal</label>
-        <textarea class="form-textarea" id="hero-title" rows="3">Son las 11:42 PM. Tu cliente pregunta. &iquest;Qui&eacute;n responde?</textarea>
+        <label class="form-label">T&iacute;tulo principal (usar \n para saltos)</label>
+        <textarea class="form-textarea" id="hero-title" rows="3">Son las 11:42 PM.\nTu cliente pregunta.\n&iquest;Qui&eacute;n responde?</textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Subt&iacute;tulo</label>
-        <textarea class="form-textarea" id="hero-subtitle" rows="2">Automatizaciones con inteligencia artificial para empresas + formaci&oacute;n para emprendedores que quieren monetizar con tecnolog&iacute;a.</textarea>
+        <textarea class="form-textarea" id="hero-subtitle" rows="2">Agentes de inteligencia artificial que atienden, califican y venden por ti — m&aacute;s formaci&oacute;n para emprendedores que quieren monetizar con tecnolog&iacute;a.</textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">URL imagen hero (opcional)</label>
-        <input type="url" class="form-input" id="hero-image" placeholder="https://ejemplo.com/hero.jpg">
+        <label class="form-label">URL imagen/video hero (opcional)</label>
+        <input type="url" class="form-input" id="hero-image" placeholder="https://ejemplo.com/hero.mp4">
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Cupos -->
+  <div class="tab-content" id="tab-cupos">
+    <h2 class="tab-title">Cupos de implementaci&oacute;n</h2>
+    <p class="tab-desc">Banda de urgencia que aparece debajo del hero.</p>
+    <div class="edit-card">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Mes/periodo</label>
+          <input type="text" class="form-input" id="cupos-mes" value="Agosto 2026">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha de cierre</label>
+          <input type="text" class="form-input" id="cupos-fecha" value="31 de agosto">
+        </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Texto bot&oacute;n 1</label>
-          <input type="text" class="form-input" id="hero-btn1" value="Soluciones para empresas">
+          <label class="form-label">Cupos disponibles</label>
+          <input type="number" class="form-input" id="cupos-disponibles" value="11" min="0">
         </div>
         <div class="form-group">
-          <label class="form-label">Texto bot&oacute;n 2</label>
-          <input type="text" class="form-input" id="hero-btn2" value="Cursos y formaci&oacute;n">
+          <label class="form-label">Cupos totales</label>
+          <input type="number" class="form-input" id="cupos-total" value="15" min="1">
         </div>
       </div>
     </div>
@@ -98,7 +118,7 @@
   <!-- TAB: Servicios -->
   <div class="tab-content" id="tab-services">
     <h2 class="tab-title">Servicios</h2>
-    <p class="tab-desc">Administra las tarjetas de servicios que aparecen en la secci&oacute;n "Empresas".</p>
+    <p class="tab-desc">Administra las tarjetas de servicios.</p>
     <div id="servicesList"></div>
     <button class="btn-admin btn-outline-admin" id="addServiceBtn" style="margin-top:12px;">+ Agregar servicio</button>
   </div>
@@ -118,10 +138,18 @@
     <button class="btn-admin btn-outline-admin" id="addCourseBtn" style="margin-top:12px;">+ Agregar curso</button>
   </div>
 
+  <!-- TAB: Testimonios -->
+  <div class="tab-content" id="tab-testimonials">
+    <h2 class="tab-title">Testimonios</h2>
+    <p class="tab-desc">12 tarjetas del carrusel de testimonios. Puedes mostrar/ocultar cada una.</p>
+    <div id="testimonialsList"></div>
+    <button class="btn-admin btn-outline-admin" id="addTestimonialBtn" style="margin-top:12px;">+ Agregar testimonio</button>
+  </div>
+
   <!-- TAB: Legal -->
   <div class="tab-content" id="tab-legal">
     <h2 class="tab-title">Legal</h2>
-    <p class="tab-desc">Contenido de las p&aacute;ginas legales (privacidad y t&eacute;rminos).</p>
+    <p class="tab-desc">Contenido de las p&aacute;ginas legales.</p>
     <div class="edit-card">
       <div class="form-group">
         <label class="form-label">Pol&iacute;tica de privacidad</label>

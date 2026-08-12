@@ -1,555 +1,498 @@
 /* ============================================================
-   HABLAME.IA — Main JavaScript
-   Supabase CMS + Animaciones + Demo chat + Stats
-   Vanilla JS · GSAP + ScrollTrigger
+   HABLAME.IA — main.js v2
+   Landing page logic: Supabase CMS, animations, carousel,
+   audit form, chat demo, counters
    ============================================================ */
-
 (function () {
   'use strict';
 
-  // --- Configuracion Supabase (reemplazar con valores reales) ---
-  var SUPABASE_URL = 'https://fnoolbnacifxgppfjsoa.supabase.co';
-  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZub29sYm5hY2lmeGdwcGZqc29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MTU3MzEsImV4cCI6MjA5OTI5MTczMX0.sNfRvqyrP_X5uDedP9j59L2fwLgboIOZSCaZCYBXvPI';
-  var WA = '573170731171';
+  const SB_URL  = 'https://fnoolbnacifxgppfjsoa.supabase.co';
+  const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZub29sYm5hY2lmeGdwcGZqc29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MTU3MzEsImV4cCI6MjA5OTI5MTczMX0.sNfRvqyrP_X5uDedP9j59L2fwLgboIOZSCaZCYBXvPI';
+  const WA_NUM  = '573170731171';
 
-  // --- Helpers ---
-  function waUrl(msg) {
-    return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
-  }
+  let sb = null;
 
-  function esc(s) {
-    if (!s) return '';
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  function pad2(n) { return (n < 10 ? '0' : '') + n; }
-
-  var WA_ICON_TPL = '<svg width="SZ" height="SZ" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
-  function waIcon(sz) { return WA_ICON_TPL.replace(/SZ/g, sz); }
-
-  // =====================================================
-  // HEADER SCROLL (inmediato)
-  // =====================================================
-  var header = document.getElementById('header');
-
-  function checkHeaderScroll() {
-    if ((window.scrollY || window.pageYOffset) > 30) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  }
-  window.addEventListener('scroll', checkHeaderScroll, { passive: true });
-  checkHeaderScroll();
-
-  // =====================================================
-  // MOBILE MENU (inmediato)
-  // =====================================================
-  var menuBtn = document.getElementById('menuBtn');
-  var menuClose = document.getElementById('menuClose');
-  var mobileNav = document.getElementById('mobileNav');
-
-  function closeMobile() {
-    if (mobileNav) {
-      mobileNav.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-  }
-
-  if (menuBtn && mobileNav) {
-    menuBtn.addEventListener('click', function () {
-      mobileNav.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
-    if (menuClose) menuClose.addEventListener('click', closeMobile);
-    mobileNav.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', closeMobile);
+  /* ---------- Supabase loader ---------- */
+  function loadSupabase() {
+    return new Promise(function (resolve) {
+      if (window.supabase) { resolve(window.supabase); return; }
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+      s.onload = function () { resolve(window.supabase); };
+      s.onerror = function () { resolve(null); };
+      document.head.appendChild(s);
     });
   }
 
-  // =====================================================
-  // SMOOTH SCROLL (inmediato)
-  // =====================================================
-  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      var target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        window.scrollTo({
-          top: target.getBoundingClientRect().top + window.scrollY - header.offsetHeight - 10,
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
+  /* ---------- Fetch section ---------- */
+  async function fetchSection(section) {
+    if (!sb) return null;
+    try {
+      var r = await sb.from('site_content').select('data').eq('section', section).single();
+      return r.data ? r.data.data : null;
+    } catch (_) { return null; }
+  }
 
-  // =====================================================
-  // PINTAR HERO desde Supabase
-  // =====================================================
+  /* ---------- Paint Hero ---------- */
   function paintHero(d) {
-    var sec = document.getElementById('top');
-    if (!sec) return;
-
-    var kicker = sec.querySelector('.kicker');
-    if (kicker && d.kicker) {
-      kicker.innerHTML = '<span class="kicker-dot"></span> ' + esc(d.kicker);
+    if (!d) return;
+    var k = document.querySelector('.hero .kicker');
+    if (k && d.kicker) {
+      k.innerHTML = '<span class="kicker-dot"></span>' + d.kicker;
     }
-
-    var h1 = sec.querySelector('h1');
+    var h1 = document.querySelector('.hero h1');
     if (h1 && d.title) {
-      var t = d.title;
-      var qi = t.lastIndexOf('¿');
-      var before, underlined;
-      if (qi > 0) {
-        before = t.substring(0, qi);
-        underlined = t.substring(qi);
-      } else {
-        before = '';
-        underlined = t;
-      }
-      var svg = '<svg viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 10 C 60 2, 140 2, 220 8 S 290 12, 298 6" fill="none" stroke="#DC2626" stroke-width="3" stroke-linecap="round"/></svg>';
-      h1.innerHTML = esc(before).replace(/\.\s*/g, '.<br>') +
-        '<span class="underline">' + esc(underlined) + svg + '</span>';
+      var parts = d.title.split('\n');
+      h1.innerHTML = parts.map(function (p, i) {
+        return i === parts.length - 1
+          ? '<span class="underline">' + p + '<svg viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 10 C 60 2, 140 2, 220 8 S 290 12, 298 6" fill="none" stroke="#FF5A5F" stroke-width="3" stroke-linecap="round"/></svg></span>'
+          : p;
+      }).join('<br>');
     }
-
-    var sub = sec.querySelector('.hero-subtitle');
+    var sub = document.querySelector('.hero-subtitle');
     if (sub && d.subtitle) sub.textContent = d.subtitle;
-
-    var btns = sec.querySelectorAll('.hero-buttons .btn');
-    if (btns[0] && d.btn1) btns[0].innerHTML = '&#x1F3E2; ' + esc(d.btn1);
-    if (btns[1] && d.btn2) btns[1].innerHTML = '&#x1F393; ' + esc(d.btn2);
   }
 
-  // =====================================================
-  // PINTAR SERVICIOS desde Supabase
-  // =====================================================
+  /* ---------- Paint Cupos ---------- */
+  function paintCupos(d) {
+    if (!d) return;
+    var mes = document.getElementById('cuposMes');
+    var disp = document.getElementById('cuposDisp');
+    var total = document.getElementById('cuposTotal');
+    var fecha = document.getElementById('cuposFecha');
+    var bar = document.getElementById('cuposBarFill');
+    if (mes && d.mes) mes.textContent = d.mes;
+    if (disp && d.disponibles != null) disp.textContent = d.disponibles;
+    if (total && d.total != null) total.textContent = d.total;
+    if (fecha && d.fecha_cierre) fecha.textContent = d.fecha_cierre;
+    if (bar && d.disponibles != null && d.total) {
+      bar.style.width = Math.round((d.disponibles / d.total) * 100) + '%';
+    }
+  }
+
+  /* ---------- Paint Testimonials ---------- */
+  function paintTestimonials(list) {
+    if (!list || !list.length) return;
+    var track = document.getElementById('carouselTrack');
+    if (!track) return;
+    track.innerHTML = '';
+    list.forEach(function (t) {
+      if (t.show === false) return;
+      var card = document.createElement('div');
+      if (t.type === 'capture') {
+        card.className = 'testi-card testi-card--capture';
+        card.innerHTML =
+          '<div class="testi-capture-placeholder">' + (t.icon || '📱') + '</div>' +
+          '<p class="testi-capture-label">' + (t.label || '') + '</p>' +
+          '<span class="testi-demo-tag">demo</span>';
+      } else {
+        card.className = 'testi-card';
+        card.innerHTML =
+          '<div class="testi-quote">&ldquo;</div>' +
+          '<p>' + (t.text || '') + '</p>' +
+          '<div class="testi-author">' +
+            '<div class="testi-avatar">' + (t.initials || '') + '</div>' +
+            '<div><strong>' + (t.name || '') + '</strong><br><span>' + (t.sector || '') + '</span></div>' +
+          '</div>';
+      }
+      track.appendChild(card);
+    });
+  }
+
+  /* ---------- Paint Services (CMS override) ---------- */
   function paintServices(list) {
+    if (!list || !list.length) return;
     var grid = document.getElementById('servicesGrid');
-    if (!grid || !list || !list.length) return;
+    if (!grid) return;
     grid.innerHTML = '';
-    var firstActive = true;
-
-    list.forEach(function (s, i) {
-      var num = pad2(i + 1);
-      var el = document.createElement('div');
-
-      if (s.active !== false && firstActive) {
-        // Tarjeta destacada (primer servicio activo)
-        firstActive = false;
-        el.className = 'card card--featured reveal';
-        var incl = (s.includes || '').split('\n').filter(Boolean);
-        var niches = (s.niches || '').split(',').map(function (n) { return n.trim(); }).filter(Boolean);
-
-        el.innerHTML =
-          '<div class="card-badge-top"><span style="color:#F97316;">&#x2605;</span> Más vendido</div>' +
-          '<div aria-hidden="true" style="position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,0.35),transparent 70%);filter:blur(40px);pointer-events:none;"></div>' +
-          '<div style="position:relative;padding:30px 34px 24px;display:flex;align-items:flex-start;gap:18px;">' +
-            '<div class="card-icon card-icon--big">' + (s.icon || '💬') + '</div>' +
-            '<div>' +
-              '<div class="card-service-num">Servicio ' + num + '</div>' +
-              '<h3 style="margin:6px 0 0;">' + esc(s.title) + '</h3>' +
-            '</div>' +
-          '</div>' +
-          '<div class="card-body" style="padding:0 34px 30px;">' +
-            '<p style="margin-bottom:22px;color:#3D3D3D;font-size:15.5px;">' + esc(s.desc) + '</p>' +
-            (incl.length ?
-              '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-bottom:22px;">' +
-              incl.map(function (x) { return '<div class="check-item"><span class="check-icon">&#x2713;</span>' + esc(x) + '</div>'; }).join('') +
-              '</div>' : '') +
-            (niches.length ?
-              '<div class="niche-tags">' +
-              niches.map(function (n) { return '<span class="niche-tag">' + esc(n) + '</span>'; }).join('') +
-              '</div>' : '') +
-            '<a href="' + waUrl('Hola, quiero saber más del servicio: ' + s.title) + '" target="_blank" rel="noopener" class="btn btn-green btn-buy card-cta" style="width:100%;">' +
-              waIcon(18) + ' QUIERO SABER MÁS <span style="margin-left:auto;">&rarr;</span>' +
-            '</a>' +
-          '</div>';
-
-      } else if (s.active !== false) {
-        // Tarjeta activa normal
-        el.className = 'card reveal';
-        var incl = (s.includes || '').split('\n').filter(Boolean);
-
-        el.innerHTML =
-          '<div class="card-header">' +
-            '<div class="card-header-blob" aria-hidden="true"></div>' +
-            '<div style="position:relative;display:flex;align-items:center;gap:14px;">' +
-              '<div class="card-icon">' + (s.icon || '📦') + '</div>' +
-              '<div class="card-service-num">Servicio ' + num + '</div>' +
-            '</div>' +
-            '<h3 style="margin:14px 0 0;">' + esc(s.title) + '</h3>' +
-          '</div>' +
-          '<div class="card-body">' +
-            '<p style="margin-bottom:16px;flex:1;">' + esc(s.desc) + '</p>' +
-            (incl.length ?
-              '<div class="check-list">' +
-              incl.map(function (x) { return '<div class="check-item"><span class="check-icon">&#x2713;</span>' + esc(x) + '</div>'; }).join('') +
-              '</div>' : '') +
-            '<a href="' + waUrl('Hola, quiero saber del servicio: ' + s.title) + '" target="_blank" rel="noopener" class="btn btn-green card-cta" style="width:100%;font-size:14px;">' +
-              waIcon(15) + ' ME INTERESA' +
-            '</a>' +
-          '</div>';
-
-      } else {
-        // Tarjeta proximamente
-        el.className = 'card card--soon reveal';
-
-        el.innerHTML =
-          '<div class="card-header card-header--soon">' +
-            '<span class="badge-soon" style="position:absolute;top:18px;right:18px;">Próximamente</span>' +
-            '<div style="display:flex;align-items:center;gap:14px;">' +
-              '<div class="card-icon card-icon--soon">' + (s.icon || '📦') + '</div>' +
-              '<div class="card-service-num" style="color:#92400E;">Servicio ' + num + '</div>' +
-            '</div>' +
-            '<h3 style="margin:14px 0 0;">' + esc(s.title) + '</h3>' +
-          '</div>' +
-          '<div class="card-body">' +
-            '<p style="margin-bottom:18px;flex:1;">' + esc(s.desc) + '</p>' +
-            '<a href="' + waUrl('Hola, me interesa el servicio: ' + s.title + ' cuando esté disponible.') + '" target="_blank" rel="noopener" class="btn btn-green card-cta" style="width:100%;font-size:14px;">AVISARME CUANDO ESTÉ</a>' +
-          '</div>';
+    list.forEach(function (svc, i) {
+      if (svc.active === false) return;
+      var card = document.createElement('div');
+      card.className = 'svc-card reveal' + (i === 0 ? ' svc-card--featured' : '');
+      var badge = i === 0 ? '<div class="svc-card-badge">★ Más vendido</div>' : '';
+      var num = String(i + 1).padStart(2, '0');
+      var checks = '';
+      if (svc.includes) {
+        checks = '<div class="svc-checks">' +
+          svc.includes.split('\n').filter(Boolean).map(function (c) {
+            return '<span>✓ ' + c + '</span>';
+          }).join('') + '</div>';
       }
-
-      grid.appendChild(el);
+      var waMsg = encodeURIComponent(svc.wa_msg || 'Hola, quiero saber más del servicio ' + svc.title);
+      var actions = i === 0
+        ? '<div class="svc-card-actions">' +
+          '<a href="#demo-section" class="btn btn-outline btn-sm">VER DEMO ↓</a>' +
+          '<a href="https://wa.me/' + WA_NUM + '?text=' + waMsg + '" target="_blank" rel="noopener" class="btn btn-wa btn-sm">Quiero saber más →</a></div>'
+        : '<a href="https://wa.me/' + WA_NUM + '?text=' + waMsg + '" target="_blank" rel="noopener" class="btn btn-wa btn-sm svc-cta">Me interesa →</a>';
+      card.innerHTML = badge +
+        '<div class="svc-card-num">' + num + '</div>' +
+        '<h3>' + (svc.title || '') + '</h3>' +
+        '<p>' + (svc.desc || '') + '</p>' +
+        checks + actions;
+      grid.appendChild(card);
     });
   }
 
-  // =====================================================
-  // PINTAR PRECIOS desde Supabase
-  // =====================================================
+  /* ---------- Paint Pricing (CMS override) ---------- */
   function paintPricing(list) {
+    if (!list || !list.length) return;
     var grid = document.getElementById('pricingGrid');
-    if (!grid || !list || !list.length) return;
+    if (!grid) return;
     grid.innerHTML = '';
-
-    list.forEach(function (p) {
-      var el = document.createElement('div');
-      el.className = 'price-card' + (p.popular ? ' price-card--popular' : '') + ' reveal';
-      var features = (p.features || '').split('\n').filter(Boolean);
-
-      el.innerHTML =
-        (p.popular ? '<div class="price-popular-badge">&#x2605; Más popular</div>' : '') +
-        '<div class="price-name">' + esc(p.name) + '</div>' +
-        '<p class="price-desc">' + esc(p.desc) + '</p>' +
-        '<div>' +
-          '<span class="price-amount">$' + esc(p.price) + '</span>' +
-          '<span class="price-period">COP/mes</span>' +
-        '</div>' +
-        '<div class="price-setup">+ $' + esc(p.setup) + ' COP configuración inicial (una vez)</div>' +
+    list.forEach(function (plan) {
+      var card = document.createElement('div');
+      card.className = 'price-card reveal' + (plan.popular ? ' price-card--popular' : '');
+      var badge = plan.popular ? '<div class="price-popular-badge">★ Más popular</div>' : '';
+      var features = '';
+      if (plan.features) {
+        features = plan.features.split('\n').filter(Boolean).map(function (f) {
+          return '<div class="price-feature"><span class="price-feature-check">✓</span><span>' + f + '</span></div>';
+        }).join('');
+      }
+      var waMsg = encodeURIComponent(plan.wa_msg || 'Hola, me interesa el plan ' + plan.name);
+      card.innerHTML = badge +
+        '<div class="price-name">' + (plan.name || '') + '</div>' +
+        '<p class="price-desc">' + (plan.desc || '') + '</p>' +
+        '<div><span class="price-amount">$' + (plan.price || '') + '</span><span class="price-period">COP/mes</span></div>' +
+        '<div class="price-setup">+ $' + (plan.setup || '') + ' COP configuración inicial (una vez)</div>' +
         '<div class="price-divider"></div>' +
-        '<div class="price-features">' +
-          features.map(function (f) {
-            var bold = f.indexOf('Todo lo del') === 0;
-            return '<div class="price-feature"><span class="price-feature-check">&#x2713;</span><span>' +
-              (bold ? '<strong>' + esc(f) + '</strong>' : esc(f)) +
-            '</span></div>';
-          }).join('') +
-        '</div>' +
-        '<a href="' + waUrl(p.wa_msg || 'Hola, me interesa el plan ' + p.name) + '" target="_blank" rel="noopener" class="btn btn-green price-cta" style="width:100%;' +
-          (p.popular ? 'font-size:15px;padding:16px;' : '') + '">Contratar ahora</a>';
-
-      grid.appendChild(el);
+        '<div class="price-features">' + features + '</div>' +
+        '<a href="https://wa.me/' + WA_NUM + '?text=' + waMsg + '" target="_blank" rel="noopener" class="btn btn-wa price-cta" style="width:100%;">Contratar ahora</a>';
+      grid.appendChild(card);
     });
   }
 
-  // =====================================================
-  // PINTAR CURSOS desde Supabase
-  // Logica de boton:
-  //   activo + payment_link → Comprar (abre Wompi)
-  //   activo sin link       → Comprar (abre WhatsApp)
-  //   proximamente          → Reservar cupo (WhatsApp)
-  // =====================================================
+  /* ---------- Paint Courses (CMS override) ---------- */
   function paintCourses(list) {
+    if (!list || !list.length) return;
     var grid = document.getElementById('coursesGrid');
-    if (!grid || !list || !list.length) return;
+    if (!grid) return;
     grid.innerHTML = '';
-    var featuredDone = false;
-
     list.forEach(function (c, i) {
-      var num = pad2(i + 1);
-      var el = document.createElement('div');
+      if (c.active === false) return;
+      var card = document.createElement('div');
+      var cls = 'course-card reveal';
+      if (i === 0) cls += ' course-card--free';
+      if (c.countdown) cls += ' course-card--countdown';
+      card.className = cls;
 
-      if (c.active && !featuredDone) {
-        // Curso destacado (primer activo)
-        featuredDone = true;
-        el.className = 'card course-card--featured reveal';
-        var incl = (c.includes || '').split('\n').filter(Boolean);
+      var badge = '';
+      if (i === 0) badge = '<div class="course-badge course-badge--free">GRATIS</div>';
+      else if (c.countdown) badge = '<div class="course-badge course-badge--promo">LANZAMIENTO</div>';
+      else badge = '<div class="course-badge">NUEVO</div>';
 
-        var buyHref = c.payment_link
-          ? esc(c.payment_link)
-          : waUrl('Hola, quiero comprar el curso: ' + c.title);
-        var btnHtml =
-          '<a href="' + buyHref + '" target="_blank" rel="noopener" class="btn btn-green btn-buy" style="width:100%;">' +
-            '<span>&#x1F6D2; Comprar por</span>' +
-            '<span class="course-price-text">$' + esc(c.price) + '</span>' +
-            '<span style="margin-left:auto;">&rarr;</span>' +
-          '</a>';
-        var priceNote = '<div class="course-price-note">Pago único · acceso de por vida</div>';
-
-        el.innerHTML =
-          '<div class="card-badge-top"><span style="color:#F97316;">&#x2605;</span> Curso estrella</div>' +
-          '<div aria-hidden="true" style="position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,0.35),transparent 70%);filter:blur(40px);pointer-events:none;"></div>' +
-          '<div style="position:relative;padding:30px 30px 0;">' +
-            '<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">' +
-              '<div class="card-icon card-icon--big">' + (c.icon || '🎓') + '</div>' +
-              '<div>' +
-                '<div class="card-service-num">Curso ' + num + '</div>' +
-                '<div class="badge-available" style="margin-top:6px;"><span class="badge-available-dot"></span> Disponible</div>' +
-              '</div>' +
-            '</div>' +
-            '<h3>' + esc(c.title) + '</h3>' +
-            '<p style="margin:12px 0 22px;color:#3D3D3D;font-size:14.5px;line-height:1.6;">' + esc(c.desc) + '</p>' +
-          '</div>' +
-          '<div style="position:relative;padding:0 30px;flex:1;">' +
-            (incl.length ?
-              '<div class="course-includes">' +
-              incl.map(function (x) { return '<div class="course-include"><span class="course-include-icon">&rarr;</span>' + esc(x) + '</div>'; }).join('') +
-              '</div>' : '') +
-          '</div>' +
-          '<div style="padding:24px 30px 30px;margin-top:20px;">' +
-            btnHtml + priceNote +
-          '</div>';
-
-      } else if (c.active) {
-        // Curso activo no destacado
-        el.className = 'card reveal';
-        var incl = (c.includes || '').split('\n').filter(Boolean);
-        var buyHref = c.payment_link
-          ? esc(c.payment_link)
-          : waUrl('Hola, quiero comprar el curso: ' + c.title);
-
-        el.innerHTML =
-          '<div class="card-header">' +
-            '<div class="card-header-blob" aria-hidden="true"></div>' +
-            '<div class="badge-available" style="position:absolute;top:16px;right:16px;"><span class="badge-available-dot"></span> Disponible</div>' +
-            '<div style="position:relative;display:flex;align-items:center;gap:14px;">' +
-              '<div class="card-icon">' + (c.icon || '🎓') + '</div>' +
-              '<div class="card-service-num">Curso ' + num + '</div>' +
-            '</div>' +
-            '<h3 style="margin:14px 0 0;">' + esc(c.title) + '</h3>' +
-          '</div>' +
-          '<div class="card-body">' +
-            '<p style="margin-bottom:16px;flex:1;">' + esc(c.desc) + '</p>' +
-            (incl.length ?
-              '<div class="course-includes" style="margin-bottom:16px;">' +
-              incl.map(function (x) { return '<div class="course-include"><span class="course-include-icon">&rarr;</span>' + esc(x) + '</div>'; }).join('') +
-              '</div>' : '') +
-            '<a href="' + buyHref + '" target="_blank" rel="noopener" class="btn btn-green card-cta" style="width:100%;font-size:14px;">&#x1F6D2; Comprar · $' + esc(c.price) + '</a>' +
-          '</div>';
-
-      } else {
-        // Curso proximamente
-        el.className = 'card reveal';
-        el.style.opacity = '0.85';
-
-        el.innerHTML =
-          '<div class="card-header">' +
-            '<div class="card-header-blob" aria-hidden="true"></div>' +
-            '<span class="badge-soon" style="position:absolute;top:16px;right:16px;">Próximamente</span>' +
-            '<div style="position:relative;display:flex;align-items:center;gap:14px;">' +
-              '<div class="card-icon">' + (c.icon || '🎓') + '</div>' +
-              '<div class="card-service-num">Curso ' + num + '</div>' +
-            '</div>' +
-            '<h3 style="margin:14px 0 0;">' + esc(c.title) + '</h3>' +
-          '</div>' +
-          '<div class="card-body">' +
-            '<p style="margin-bottom:18px;flex:1;">' + esc(c.desc) + '</p>' +
-            '<div style="font-size:16px;color:#9A9A9A;font-weight:600;margin-bottom:16px;">Próximamente</div>' +
-            '<a href="' + waUrl('Hola, quiero reservar cupo para el curso: ' + c.title) + '" target="_blank" rel="noopener" class="btn btn-green card-cta" style="width:100%;font-size:14px;">Reservar cupo</a>' +
-          '</div>';
+      var price = '';
+      if (c.price) {
+        var oldPrice = c.old_price ? '<span class="course-price-old">$' + c.old_price + '</span>' : '';
+        price = '<div class="course-price">' + oldPrice + '$' + c.price + ' <span>COP</span></div>';
       }
 
-      grid.appendChild(el);
+      var countdown = '';
+      if (c.countdown && c.countdown_fecha) {
+        countdown = '<div class="course-countdown">Precio de lanzamiento hasta el <strong>' + c.countdown_fecha + '</strong></div>';
+      }
+
+      var link = c.landing_url || '#';
+      var btnClass = i === 0 || c.countdown ? 'btn btn-accent' : 'btn btn-wa';
+      var btnText = i === 0 ? 'Acceder gratis →' : 'Ver landing del curso →';
+      if (i === 0) link = '#auditoria';
+
+      card.innerHTML = badge +
+        '<h3>' + (c.title || '') + '</h3>' +
+        '<p>' + (c.desc || '') + '</p>' +
+        price + countdown +
+        '<a href="' + link + '" class="' + btnClass + '" style="width:100%;">' + btnText + '</a>';
+      grid.appendChild(card);
     });
   }
 
-  // =====================================================
-  // ACTUALIZAR WHATSAPP Y REDES SOCIALES
-  // =====================================================
+  /* ---------- Update Config ---------- */
   function updateConfig(cfg) {
-    if (cfg.whatsapp) WA = cfg.whatsapp;
-
-    document.querySelectorAll('a[href*="wa.me/"]').forEach(function (a) {
-      a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + WA);
-    });
-
-    var socials = document.querySelectorAll('.footer-social');
-    if (socials.length >= 3) {
-      if (cfg.instagram) socials[0].href = 'https://instagram.com/' + cfg.instagram.replace(/@/g, '');
-      if (cfg.tiktok) socials[1].href = 'https://tiktok.com/@' + cfg.tiktok.replace(/@/g, '');
-      if (cfg.facebook) socials[2].href = 'https://facebook.com/' + cfg.facebook;
+    if (!cfg) return;
+    if (cfg.whatsapp) {
+      document.querySelectorAll('a[href*="wa.me"]').forEach(function (a) {
+        a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + cfg.whatsapp);
+      });
     }
   }
 
-  // =====================================================
-  // ANIMACIONES (se ejecutan DESPUES de pintar contenido)
-  // =====================================================
-  function initAnimations() {
-    // --- GSAP ScrollTrigger ---
-    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger);
-
-      gsap.utils.toArray('.reveal').forEach(function (el) {
-        gsap.fromTo(el,
-          { opacity: 0, y: 28 },
-          {
-            opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 88%', once: true }
-          }
-        );
-      });
-
-      document.querySelectorAll('.world-separator-line').forEach(function (line) {
-        gsap.fromTo(line,
-          { scaleX: 0 },
-          {
-            scaleX: 1, duration: 0.8, ease: 'power2.out',
-            scrollTrigger: { trigger: line, start: 'top 85%', once: true }
-          }
-        );
-      });
-    } else {
-      document.querySelectorAll('.reveal').forEach(function (el) {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
-    }
-
-    // --- Stats counter ---
-    var statsAnimated = false;
-    var stat1 = document.getElementById('stat1');
-    var stat2 = document.getElementById('stat2');
-    var stat3 = document.getElementById('stat3');
-    var heroStats = document.getElementById('heroStats');
-
-    function animateCounter(el, target, duration) {
-      var start = performance.now();
-      function tick(now) {
-        var p = Math.min(1, (now - start) / duration);
-        var eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(target * eased);
-        if (p < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    }
-
-    if (heroStats && 'IntersectionObserver' in window) {
-      var statsObs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting && !statsAnimated) {
-          statsAnimated = true;
-          animateCounter(stat1, 24, 1100);
-          animateCounter(stat2, 85, 1300);
-          animateCounter(stat3, 2, 900);
-          statsObs.disconnect();
-        }
-      }, { threshold: 0.4 });
-      statsObs.observe(heroStats);
-    } else if (stat1) {
-      stat1.textContent = '24';
-      stat2.textContent = '85';
-      stat3.textContent = '2';
-    }
-
-    // --- Chat demo ---
-    var chatMessages = [
-      { from: 'client', text: 'Hola, ¿tienen disponibilidad para un corte mañana a las 3pm?', time: '11:42 PM' },
-      { from: 'luna', text: '¡Hola! 😊 Sí, tenemos disponibilidad mañana a las 3:00 PM con Sandra. ¿Te confirmo la cita?', time: '11:42 PM' },
-      { from: 'client', text: '¡Sí, por favor!', time: '11:43 PM' },
-      { from: 'luna', text: 'Listo, tu cita queda confirmada 📋\n\n📅 Mañana, 3:00 PM\n💇 Corte con Sandra\n📍 Stilos Pasto, Cra 27 #18-45\n\nTe enviaré un recordatorio 1 hora antes. ¡Te esperamos!', time: '11:43 PM' }
-    ];
-
-    var chatBubbles = document.getElementById('chatBubbles');
-    var chatBody = document.getElementById('chatBody');
-    var chatPlayed = false;
-
-    function playChat() {
-      if (chatPlayed || !chatBubbles) return;
-      chatPlayed = true;
-      var step = 0;
-
-      function showNext() {
-        if (step >= chatMessages.length) return;
-        var msg = chatMessages[step];
-        var div = document.createElement('div');
-        div.className = 'chat-bubble chat-bubble--' + (msg.from === 'luna' ? 'luna' : 'client');
-        div.style.whiteSpace = 'pre-wrap';
-        div.textContent = msg.text;
-        var time = document.createElement('span');
-        time.className = 'chat-bubble-time';
-        time.textContent = msg.time;
-        div.appendChild(time);
-        chatBubbles.appendChild(div);
-        requestAnimationFrame(function () { div.classList.add('visible'); });
-        if (chatBody) chatBody.scrollTop = chatBody.scrollHeight;
-        step++;
-        if (step < chatMessages.length) setTimeout(showNext, 1500);
-      }
-
-      setTimeout(showNext, 700);
-    }
-
-    var demoSection = document.getElementById('demo-section');
-    if (demoSection && 'IntersectionObserver' in window) {
-      var chatObs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) {
-          playChat();
-          chatObs.disconnect();
-        }
-      }, { threshold: 0.25 });
-      chatObs.observe(demoSection);
-    }
-
-    // --- WA float: ocultar en seccion cursos ---
-    var waFloat = document.getElementById('waFloat');
-    var cursosSection = document.getElementById('cursos-section');
-    if (waFloat && cursosSection && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            waFloat.classList.add('hidden');
-          } else {
-            waFloat.classList.remove('hidden');
-          }
-        });
-      }, { threshold: 0.15 }).observe(cursosSection);
-    }
-  }
-
-  // =====================================================
-  // BOOT: Supabase -> pintar contenido -> iniciar animaciones
-  // Si Supabase falla, el contenido hardcodeado queda visible
-  // =====================================================
-  (function boot() {
-    if (SUPABASE_URL.indexOf('TU-PROYECTO') !== -1) {
-      initAnimations();
+  /* ---------- Scroll Reveal ---------- */
+  function initReveal() {
+    var els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      els.forEach(function (el) { el.classList.add('visible'); });
       return;
     }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { obs.observe(el); });
+  }
 
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-    script.onload = function () {
-      try {
-        var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        sb.from('site_content').select('*')
-          .then(function (res) {
-            if (res.data && res.data.length > 0) {
-              var map = {};
-              res.data.forEach(function (r) { map[r.section] = r.data; });
-              if (map.config && map.config.whatsapp) WA = map.config.whatsapp;
-              if (map.hero) paintHero(map.hero);
-              if (map.services) paintServices(map.services);
-              if (map.pricing) paintPricing(map.pricing);
-              if (map.courses) paintCourses(map.courses);
-              if (map.config) updateConfig(map.config);
-            }
-            initAnimations();
-          })
-          .catch(function () { initAnimations(); });
-      } catch (e) {
-        initAnimations();
+  /* ---------- Header scroll ---------- */
+  function initHeader() {
+    var header = document.getElementById('header');
+    if (!header) return;
+    window.addEventListener('scroll', function () {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+  }
+
+  /* ---------- Mobile menu ---------- */
+  function initMobileMenu() {
+    var btn = document.getElementById('menuBtn');
+    var nav = document.getElementById('mobileNav');
+    var close = document.getElementById('menuClose');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', function () { nav.classList.add('open'); });
+    if (close) close.addEventListener('click', function () { nav.classList.remove('open'); });
+    nav.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { nav.classList.remove('open'); });
+    });
+  }
+
+  /* ---------- Stats counter ---------- */
+  function initCounters() {
+    var container = document.getElementById('heroStats');
+    if (!container) return;
+    var s1 = document.getElementById('stat1');
+    var s2 = document.getElementById('stat2');
+    var s3 = document.getElementById('stat3');
+    var done = false;
+
+    function animate() {
+      if (done) return;
+      done = true;
+      animateValue(s1, 0, 24, 1200);
+      animateValue(s2, 0, 85, 1400);
+      animateValue(s3, 0, 2, 800);
+    }
+
+    var obs = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { animate(); obs.disconnect(); }
+    }, { threshold: 0.5 });
+    obs.observe(container);
+  }
+
+  function animateValue(el, start, end, duration) {
+    if (!el) return;
+    var range = end - start;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(start + range * eased);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- Chat demo ---------- */
+  function initChatDemo() {
+    var body = document.getElementById('chatBubbles');
+    if (!body) return;
+
+    var messages = [
+      { type: 'client', text: '¿Cuánto cuesta el combo familiar?' },
+      { type: 'luna', text: '¡Hola! 😊 El combo familiar está en $45.000. ¿Te lo separo o quieres ver las otras opciones?' },
+      { type: 'client', text: 'Ese está bien. ¿Tienen domicilio?' },
+      { type: 'luna', text: 'Sí, hacemos domicilio gratis en pedidos de $30.000+. ¿Me das tu dirección para agendarlo? 🏠' }
+    ];
+
+    var done = false;
+    var obs = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting && !done) {
+        done = true;
+        showMessages(body, messages);
+        obs.disconnect();
       }
-    };
-    script.onerror = function () { initAnimations(); };
-    document.head.appendChild(script);
-  })();
+    }, { threshold: 0.3 });
+    obs.observe(body.parentElement);
+  }
 
+  function showMessages(container, msgs) {
+    msgs.forEach(function (msg, i) {
+      setTimeout(function () {
+        var bubble = document.createElement('div');
+        bubble.className = 'chat-bubble chat-bubble--' + msg.type;
+        bubble.textContent = msg.text;
+        container.appendChild(bubble);
+        requestAnimationFrame(function () {
+          bubble.classList.add('show');
+          container.parentElement.scrollTop = container.parentElement.scrollHeight;
+        });
+      }, i * 900);
+    });
+  }
+
+  /* ---------- Testimonials carousel auto-scroll ---------- */
+  function initCarousel() {
+    var track = document.getElementById('carouselTrack');
+    if (!track) return;
+    var paused = false;
+    var interval = 3000;
+
+    track.addEventListener('mouseenter', function () { paused = true; });
+    track.addEventListener('mouseleave', function () { paused = false; });
+    track.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+    track.addEventListener('touchend', function () {
+      setTimeout(function () { paused = false; }, 4000);
+    });
+
+    setInterval(function () {
+      if (paused) return;
+      var cardW = track.firstElementChild ? track.firstElementChild.offsetWidth + 20 : 340;
+      var maxScroll = track.scrollWidth - track.clientWidth;
+      if (track.scrollLeft >= maxScroll - 10) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: cardW, behavior: 'smooth' });
+      }
+    }, interval);
+  }
+
+  /* ---------- Audit form ---------- */
+  function initAuditForm() {
+    var form = document.getElementById('auditForm');
+    var msg = document.getElementById('auditMsg');
+    if (!form) return;
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var btn = document.getElementById('auditBtn');
+      var honeypot = form.querySelector('[name="website"]');
+      if (honeypot && honeypot.value) return;
+
+      btn.disabled = true;
+      btn.querySelector('.audit-btn-text').textContent = 'Enviando...';
+      msg.textContent = '';
+      msg.className = 'audit-msg';
+
+      var data = {
+        nombre: form.querySelector('[name="nombre"]').value.trim(),
+        whatsapp: form.querySelector('[name="whatsapp"]').value.trim(),
+        email: form.querySelector('[name="email"]').value.trim(),
+        tipo_negocio: form.querySelector('[name="tipo_negocio"]').value,
+        freno: form.querySelector('[name="freno"]').value.trim(),
+        origen: 'web',
+        created_at: new Date().toISOString()
+      };
+
+      try {
+        if (sb) {
+          var r = await sb.from('auditorias').insert([data]);
+          if (r.error) throw r.error;
+        }
+        msg.textContent = '¡Listo! Te contactaremos pronto por WhatsApp.';
+        msg.className = 'audit-msg success';
+        form.reset();
+
+        var waText = encodeURIComponent(
+          'Hola, acabo de solicitar la auditoría gratis desde la web. Soy ' + data.nombre + '.'
+        );
+        setTimeout(function () {
+          window.open('https://wa.me/' + WA_NUM + '?text=' + waText, '_blank');
+        }, 1200);
+
+      } catch (err) {
+        msg.textContent = 'Error al enviar. Intenta de nuevo o escríbenos por WhatsApp.';
+        msg.className = 'audit-msg error';
+      }
+
+      btn.disabled = false;
+      btn.querySelector('.audit-btn-text').textContent = 'SOLICITAR MI AUDITORÍA GRATIS';
+    });
+  }
+
+  /* ---------- WA float visibility ---------- */
+  function initWaFloat() {
+    var waFloat = document.getElementById('waFloat');
+    if (!waFloat) return;
+    var sections = ['cursos-section', 'auditoria'];
+
+    window.addEventListener('scroll', function () {
+      var hide = false;
+      sections.forEach(function (id) {
+        var sec = document.getElementById(id);
+        if (!sec) return;
+        var rect = sec.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) hide = true;
+      });
+      waFloat.classList.toggle('hidden', hide);
+    }, { passive: true });
+  }
+
+  /* ---------- GSAP animations ---------- */
+  function initGSAP() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.utils.toArray('.reveal').forEach(function (el) {
+      gsap.fromTo(el,
+        { y: 28, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.7, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+        }
+      );
+    });
+  }
+
+  /* ---------- BOOT ---------- */
+  async function boot() {
+    initHeader();
+    initMobileMenu();
+
+    var supabaseLib = await loadSupabase();
+    if (supabaseLib) {
+      sb = supabaseLib.createClient(SB_URL, SB_KEY);
+    }
+
+    var results = await Promise.allSettled([
+      fetchSection('hero'),
+      fetchSection('services'),
+      fetchSection('pricing'),
+      fetchSection('courses'),
+      fetchSection('config'),
+      fetchSection('cupos'),
+      fetchSection('testimonials')
+    ]);
+
+    var hero    = results[0].status === 'fulfilled' ? results[0].value : null;
+    var svcs    = results[1].status === 'fulfilled' ? results[1].value : null;
+    var prices  = results[2].status === 'fulfilled' ? results[2].value : null;
+    var courses = results[3].status === 'fulfilled' ? results[3].value : null;
+    var config  = results[4].status === 'fulfilled' ? results[4].value : null;
+    var cupos   = results[5].status === 'fulfilled' ? results[5].value : null;
+    var testis  = results[6].status === 'fulfilled' ? results[6].value : null;
+
+    paintHero(hero);
+    paintServices(svcs);
+    paintPricing(prices);
+    paintCourses(courses);
+    paintCupos(cupos);
+    paintTestimonials(testis);
+    updateConfig(config);
+
+    initReveal();
+    initGSAP();
+    initCounters();
+    initChatDemo();
+    initCarousel();
+    initAuditForm();
+    initWaFloat();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 })();
