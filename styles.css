@@ -18,6 +18,7 @@
   --sale-red:#EF4444;
   --gold:#F5B400;
   --ink:#1A1A2E;
+  --navy:#0F1E36;            /* fondo de demo y footer: combina con la mascota */
   --ink-soft:#3A3A4A;
   --muted:#5A5A6A;
   --bg-cream:#FAF7F2;
@@ -92,9 +93,10 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
   border:2px solid var(--fuchsia);
   box-shadow:0 8px 24px -8px rgba(225,48,108,.55),0 0 0 4px rgba(225,48,108,.12);
   transition:transform .18s,box-shadow .18s;}
-.btn-expert::before{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
-  transform:skewX(-20deg);animation:shine-sweep 3.2s ease-in-out infinite;}
+/* destello: capa de ancho completo que se desplaza con transform (GPU, sin recalcular la página) */
+.btn-expert::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);
+  transform:translateX(-100%);animation:shine-sweep 3.2s ease-in-out infinite;will-change:transform;}
 .btn-expert:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 30px -8px rgba(225,48,108,.7),0 0 0 4px rgba(225,48,108,.18);}
 .btn-expert:active{transform:scale(.98);}
 .btn-expert--full{width:100%;}
@@ -123,14 +125,14 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
   animation:glow-pulse 2.4s ease-in-out infinite;}
 /* destello que recorre */
 .btn-star-shine{position:absolute;inset:0;border-radius:16px;overflow:hidden;z-index:0;}
-.btn-star-shine::before{content:"";position:absolute;top:0;left:-60%;width:38%;height:100%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);
-  transform:skewX(-20deg);animation:shine-sweep 2.8s ease-in-out infinite;}
+.btn-star-shine::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 34%,rgba(255,255,255,.6) 50%,transparent 66%);
+  transform:translateX(-100%);animation:shine-sweep 2.8s ease-in-out infinite;will-change:transform;}
 .btn-star-text{position:relative;z-index:1;}
 
 @keyframes spin-angle{to{--angle:360deg;}}
 @keyframes glow-pulse{0%,100%{opacity:.35;}50%{opacity:.85;}}
-@keyframes shine-sweep{0%{left:-60%;}55%,100%{left:120%;}}
+@keyframes shine-sweep{0%{transform:translateX(-100%);}55%,100%{transform:translateX(100%);}}
 
 /* ============================================================
    HEADER
@@ -184,10 +186,12 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
    BANDA DE OFERTA
    ============================================================ */
 .offer{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--sale-red),var(--brand-orange));padding:24px 0;text-align:center;}
-.offer-spark{position:absolute;top:0;height:100%;width:40%;background:linear-gradient(100deg,transparent,rgba(245,180,0,.45),transparent);transform:skewX(-18deg);pointer-events:none;}
-.offer-spark--1{left:-40%;animation:offer-sweep 4.5s linear infinite;}
-.offer-spark--2{left:-40%;animation:offer-sweep 4.5s linear infinite 2.2s;}
-@keyframes offer-sweep{0%{left:-40%;}100%{left:120%;}}
+/* destellos dorados: capa completa movida con transform (GPU) */
+.offer-spark{position:absolute;inset:0;pointer-events:none;will-change:transform;transform:translateX(-100%);
+  background:linear-gradient(100deg,transparent 36%,rgba(245,180,0,.45) 50%,transparent 64%);}
+.offer-spark--1{animation:offer-sweep 4.5s linear infinite;}
+.offer-spark--2{animation:offer-sweep 4.5s linear infinite 2.2s;}
+@keyframes offer-sweep{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
 .offer-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;color:#fff;}
 .offer-flame{font-size:26px;}
 .offer-text{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:clamp(16px,2.6vw,24px);letter-spacing:.01em;text-shadow:0 1px 8px rgba(0,0,0,.15);}
@@ -278,12 +282,12 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
 /* ============================================================
    MÍRALO EN ACCIÓN — ÚNICA SECCIÓN NEGRA
    ============================================================ */
-.demo{background:var(--ink);color:var(--bg-cream);padding:72px 0;}
+.demo{background:var(--navy);color:var(--bg-cream);padding:72px 0;}
 .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
 .demo h2{color:var(--bg-cream);margin:14px 0;}
 .demo h2 .hl{color:var(--brand-orange);}
 .demo-lead{color:rgba(250,247,242,.7);font-size:16px;line-height:1.6;max-width:460px;}
-.demo-phone-wrap{display:flex;justify-content:center;}
+.demo-phone-wrap{display:flex;justify-content:center;position:relative;isolation:isolate;} /* isolate: la mascota mini queda detrás del teléfono pero delante del fondo */
 
 /* Marco de celular */
 .phone{width:270px;border-radius:36px;background:#0B0B14;padding:8px;box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);position:relative;}
@@ -399,7 +403,7 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
 /* ============================================================
    FOOTER
    ============================================================ */
-.footer{background:var(--ink);color:rgba(250,247,242,.7);padding:60px 0 0;}
+.footer{background:var(--navy);color:rgba(250,247,242,.7);padding:60px 0 0;}
 .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;}
 .footer-heading{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;color:var(--bg-cream);margin-bottom:14px;text-transform:uppercase;letter-spacing:.05em;}
 .footer-links{display:flex;flex-direction:column;gap:10px;}
@@ -408,7 +412,7 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
 .footer-socials{display:flex;gap:10px;margin-top:18px;}
 .footer-social{width:38px;height:38px;border-radius:10px;background:rgba(250,247,242,.08);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--bg-cream);transition:background .2s,color .2s;}
 .footer-social:hover{background:rgba(249,115,22,.2);color:var(--brand-orange);}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding:24px 0;margin-top:44px;border-top:1px solid rgba(250,247,242,.08);font-size:13px;color:rgba(250,247,242,.4);flex-wrap:wrap;gap:8px;}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding:24px 0;margin-top:44px;border-top:1px solid rgba(250,247,242,.08);font-size:13px;color:rgba(250,247,242,.62);flex-wrap:wrap;gap:8px;}
 
 /* ============================================================
    WA FLOAT
@@ -509,6 +513,47 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
 .phone-input-bar input.phone-input-field::placeholder{color:rgba(255,255,255,.4);}
 button.phone-send-btn{cursor:pointer;border:none;}
 
+/* ============================================================
+   MASCOTA — animaciones en CSS puro (solo transform / opacity)
+   ============================================================ */
+/* Contenedor: el JS le aplica la escala/opacidad según el scroll */
+.mascota{position:relative;width:340px;max-width:72vw;aspect-ratio:800/752;margin:0 auto 18px;transform-origin:50% 100%;will-change:transform,opacity;}
+/* Capa de inclinación hacia el mouse (JS, solo desktop) */
+.mascota-tilt{position:absolute;inset:0;will-change:transform;}
+/* Flotación + rotación leve sincronizadas (3.5s) */
+.mascota-float{position:absolute;inset:0;animation:mascota-flota 3.5s ease-in-out infinite;will-change:transform;}
+/* Poses apiladas: el cambio de mirada es un crossfade de opacidad */
+.mascota-pose{position:absolute;inset:0;opacity:0;transition:opacity .2s ease;}
+.mascota-pose.is-on{opacity:1;}
+.mascota-pose img,.mascota-mini img{width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 0 12px rgba(249,115,22,.5));}   /* rim light naranja (estático) */
+/* Halo naranja que "respira" detrás (opacidad, sin repintar) */
+.mascota-glow{position:absolute;inset:6% 4% 12%;border-radius:50%;z-index:-1;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(249,115,22,.5),rgba(249,115,22,0));
+  animation:mascota-brillo 3s ease-in-out infinite;will-change:opacity;}
+/* Sombra en el piso: se achica y aclara cuando la mascota sube */
+.mascota-shadow{position:absolute;left:19%;bottom:-3%;width:62%;height:9%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(26,26,46,.38),rgba(26,26,46,0));
+  animation:mascota-sombra 3.5s ease-in-out infinite;will-change:transform,opacity;}
+/* Pausa cuando no está visible (lo activa el JS) */
+.mascota.is-paused .mascota-float,.mascota.is-paused .mascota-glow,.mascota.is-paused .mascota-shadow{animation-play-state:paused;}
+
+@keyframes mascota-flota{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-10px) rotate(2deg);}}
+@keyframes mascota-brillo{0%,100%{opacity:.5;}50%{opacity:1;}}
+@keyframes mascota-sombra{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(.78);opacity:.55;}}
+
+/* Mascota pequeña de la demo: asomada detrás del teléfono, solo flotación + brillo */
+.mascota-mini{position:absolute;left:-54px;bottom:78px;width:74px;aspect-ratio:800/752;z-index:-1;
+  animation:mascota-mini 3.5s ease-in-out infinite;will-change:transform;}
+.mascota-mini img{filter:drop-shadow(0 0 10px rgba(249,115,22,.95));}  /* más glow para separarla del navy */
+.mascota-mini .mascota-glow{inset:-10%;background:radial-gradient(closest-side,rgba(249,115,22,.7),rgba(249,115,22,0));}
+@keyframes mascota-mini{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-5px) rotate(-4deg);}}
+
+@media(max-width:768px){
+  .mascota{width:213px;margin-bottom:14px;}      /* ~200px de alto en móvil */
+  .mascota-mini{left:-40px;width:60px;}
+}
+
 /* ---------- Reduced motion ---------- */
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
@@ -517,4 +562,7 @@ button.phone-send-btn{cursor:pointer;border:none;}
   .btn-star::before{animation:none;}
   .btn-star::after{opacity:.5;}
   .hl::after{transform:scaleX(1);}
+  /* Mascota: estática, solo pose "frente" */
+  .mascota-float,.mascota-glow,.mascota-shadow,.mascota-mini{animation:none!important;}
+  .mascota,.mascota-tilt{transform:none!important;opacity:1!important;}
 }

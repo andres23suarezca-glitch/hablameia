@@ -298,9 +298,22 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
+  /* ---------- Video del hero: se carga al terminar la página (no frena la carga) ---------- */
+  function initHeroVideo() {
+    var v = document.querySelector('.hero-video video');
+    if (!v) return;
+    var cargar = function () {
+      [].forEach.call(v.querySelectorAll('source[data-src]'), function (s) { s.src = s.dataset.src; });
+      v.load(); // con autoplay + muted arranca solo y se repite en bucle
+    };
+    if (document.readyState === 'complete') cargar();
+    else window.addEventListener('load', cargar);
+  }
+
   /* ---------- BOOT ---------- */
   function boot() {
     // Interacciones (no dependen de red)
+    initHeroVideo();
     initHeader();
     initMobileMenu();
     initReveal();
@@ -331,4 +344,82 @@
   } else {
     boot();
   }
+})();
+
+/* MASCOTA: scroll (escala + mirada) y mouse en un solo rAF. Flotación/brillo/sombra = CSS */
+(function () {
+  var m = document.getElementById('mascota');
+  if (!m || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var tilt = document.getElementById('mascotaTilt');
+  var hero = m.closest('section');
+  var poses = {};
+  [].forEach.call(m.querySelectorAll('.mascota-pose'), function (p) { poses[p.dataset.pose] = p; });
+  var actual = 'frente', lastY = scrollY, idle, visible = true, ticking = false;
+  var mouse = matchMedia('(hover: hover) and (pointer: fine)').matches; // solo desktop
+  var tx = 0, ty = 0, cx = 0, cy = 0;
+
+  // Poses secundarias: se cargan después del evento load (no frenan la carga)
+  addEventListener('load', function () {
+    [].forEach.call(m.querySelectorAll('[data-srcset],[data-src]'), function (el) {
+      if (el.dataset.srcset) el.srcset = el.dataset.srcset;
+      if (el.dataset.src) el.src = el.dataset.src;
+    });
+  });
+
+  // Cambia de pose con crossfade; si la pose no existe, queda de frente
+  function pose(n) {
+    if (!poses[n]) n = 'frente';
+    if (n === actual) return;
+    poses[actual].classList.remove('is-on');
+    poses[n].classList.add('is-on');
+    actual = n;
+  }
+
+  function pedir() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+
+  function frame() {
+    ticking = false;
+    // Mientras el hero sale de pantalla: escala 1 -> 0.85 y baja un poco la opacidad
+    var r = hero.getBoundingClientRect();
+    var p = Math.min(Math.max(-r.top / r.height, 0), 1);
+    m.style.transform = 'scale(' + (1 - p * .15).toFixed(3) + ')';
+    m.style.opacity = (1 - p * .25).toFixed(3);
+    // Inclinación suavizada hacia el cursor (máx. 8°)
+    if (mouse) {
+      cx += (tx - cx) * .12; cy += (ty - cy) * .12;
+      tilt.style.transform = 'perspective(800px) rotateX(' + cy.toFixed(2) + 'deg) rotateY(' + cx.toFixed(2) + 'deg)';
+      if (Math.abs(tx - cx) > .05 || Math.abs(ty - cy) > .05) pedir();
+    }
+  }
+
+  // Scroll abajo -> mira abajo, arriba -> mira arriba, 600ms quieto -> frente
+  addEventListener('scroll', function () {
+    var y = scrollY;
+    if (visible && Math.abs(y - lastY) > 2) {
+      pose(y > lastY ? 'abajo' : 'arriba');
+      clearTimeout(idle);
+      idle = setTimeout(function () { pose('frente'); }, 600);
+    }
+    lastY = y;
+    pedir();
+  }, { passive: true });
+
+  if (mouse) {
+    addEventListener('mousemove', function (e) {
+      if (!visible) return;
+      tx = (e.clientX / innerWidth - .5) * 16;
+      ty = -(e.clientY / innerHeight - .5) * 16;
+      pedir();
+    }, { passive: true });
+    document.addEventListener('mouseleave', function () { tx = ty = 0; pedir(); });
+  }
+
+  // Pausa las animaciones cuando la mascota no se ve
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) {
+      visible = e[0].isIntersecting;
+      m.classList.toggle('is-paused', !visible);
+    }).observe(m);
+  }
+  pedir();
 })();

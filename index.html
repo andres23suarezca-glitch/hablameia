@@ -14,7 +14,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+  <!-- Fuentes sin bloquear el pintado: se aplican al terminar de descargar -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"></noscript>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -59,17 +61,30 @@
   <div class="hero-glow hero-glow--2" aria-hidden="true"></div>
 
   <div class="container">
+    <!-- MASCOTA (protagonista). Capas: escala por scroll > inclinación mouse > flotación -->
+    <div class="mascota" id="mascota">
+      <div class="mascota-tilt" id="mascotaTilt">
+        <div class="mascota-float">
+          <span class="mascota-glow" aria-hidden="true"></span>
+          <picture class="mascota-pose is-on" data-pose="frente">
+            <source type="image/webp" srcset="assets/img/mascota/mascota-frente-400.webp 400w, assets/img/mascota/mascota-frente-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
+            <img src="assets/img/mascota/mascota-frente.png" alt="Mascota de Hablame.IA" width="800" height="752" fetchpriority="high">
+          </picture>
+          <picture class="mascota-pose" data-pose="arriba" aria-hidden="true">
+            <source type="image/webp" data-srcset="assets/img/mascota/mascota-arriba-400.webp 400w, assets/img/mascota/mascota-arriba-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
+            <img data-src="assets/img/mascota/mascota-arriba.png" alt="" width="800" height="752">
+          </picture>
+          <!-- Pose "abajo" pendiente: cuando llegue, copia el bloque de "arriba" con data-pose="abajo" -->
+        </div>
+      </div>
+      <span class="mascota-shadow" aria-hidden="true"></span>
+    </div>
+
     <div class="kicker reveal"><span class="kicker-dot"></span>HABLAME.IA &middot; Inteligencia Artificial &middot; Colombia</div>
 
     <h1 class="hero-title reveal">
       &iquest;Est&aacute;s listo para dejar de usar mal la &laquo;IA&raquo; y empezar a usarla para <span class="hl">automatizar, vender y crecer</span> tu negocio?
     </h1>
-
-    <!-- IMAGEN -->
-    <div class="hero-media reveal">
-      <div class="hero-media-badge"><span class="kicker-dot"></span> IA en tu negocio</div>
-      <img src="assets/hero.webp" alt="Profesional trabajando con inteligencia artificial y anal&iacute;tica" width="1376" height="768" fetchpriority="high">
-    </div>
 
     <!-- BOTONES -->
     <div class="hero-buttons reveal">
@@ -82,9 +97,10 @@
 
     <!-- VIDEO (se reproduce en bucle) -->
     <div class="hero-video reveal">
-      <video autoplay muted loop playsinline preload="auto" poster="assets/luna-poster.webp" width="540" height="960" aria-label="Demostraci&oacute;n de automatizaci&oacute;n con IA">
-        <source src="assets/luna-demo.webm" type="video/webm">
-        <source src="assets/luna-demo.mp4" type="video/mp4">
+      <!-- El video se carga después de la página (main.js); mientras, se ve la portada -->
+      <video autoplay muted loop playsinline preload="none" poster="assets/luna-poster.webp" width="540" height="960" aria-label="Demostraci&oacute;n de automatizaci&oacute;n con IA">
+        <source data-src="assets/luna-demo.mp4" type="video/mp4">
+        <source data-src="assets/luna-demo.webm" type="video/webm">
       </video>
     </div>
 
@@ -290,6 +306,14 @@
       <!-- LUNA — DEMO INTERACTIVA -->
       <div class="demo-phone-wrap reveal">
         <div class="phone">
+          <!-- Mascota pequeña asomada detrás del teléfono (reutiliza la imagen del hero, ya en caché) -->
+          <div class="mascota-mini" aria-hidden="true">
+            <span class="mascota-glow"></span>
+            <picture>
+              <source type="image/webp" srcset="assets/img/mascota/mascota-frente-400.webp 400w, assets/img/mascota/mascota-frente-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
+              <img src="assets/img/mascota/mascota-frente.png" alt="" width="800" height="752" loading="lazy">
+            </picture>
+          </div>
           <div class="phone-notch"></div>
           <div class="phone-screen">
             <div class="phone-statusbar">
