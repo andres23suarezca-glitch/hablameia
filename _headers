@@ -3,3 +3,14 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Imágenes y video: el navegador los guarda 30 días (visitas repetidas cargan al instante)
+/assets/*
+  Cache-Control: public, max-age=2592000
+
+/favicon.ico
+  Cache-Control: public, max-age=2592000
+/favicon.png
+  Cache-Control: public, max-age=2592000
+/apple-touch-icon.png
+  Cache-Control: public, max-age=2592000

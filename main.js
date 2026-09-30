@@ -10,26 +10,32 @@
   var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZub29sYm5hY2lmeGdwcGZqc29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MTU3MzEsImV4cCI6MjA5OTI5MTczMX0.sNfRvqyrP_X5uDedP9j59L2fwLgboIOZSCaZCYBXvPI';
   var WA_NUM = '573170731171';
 
-  var sb = null;
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- Supabase loader ---------- */
-  function loadSupabase() {
-    return new Promise(function (resolve) {
-      if (window.supabase) { resolve(window.supabase); return; }
-      var s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-      s.onload = function () { resolve(window.supabase); };
-      s.onerror = function () { resolve(null); };
-      document.head.appendChild(s);
-    });
+  /* ---------- Supabase por llamadas directas (sin librería de 55 KB) ---------- */
+  var SB_HEAD = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY };
+
+  // Lee en UNA sola petición lo que se edita desde el admin (oferta, cursos, config)
+  function cargarContenido() {
+    fetch(SB_URL + '/rest/v1/site_content?select=section,data&section=in.(oferta,courses,config)', { headers: SB_HEAD })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        var m = {};
+        rows.forEach(function (row) { m[row.section] = row.data; });
+        paintOffer(m.oferta);
+        paintCourses(m.courses);
+        updateConfig(m.config);
+      })
+      .catch(function () {});
   }
 
-  function fetchSection(section) {
-    if (!sb) return Promise.resolve(null);
-    return sb.from('site_content').select('data').eq('section', section).single()
-      .then(function (r) { return r.data ? r.data.data : null; })
-      .catch(function () { return null; });
+  // Guarda la solicitud de auditoría en la tabla "auditorias"
+  function guardarLead(data) {
+    return fetch(SB_URL + '/rest/v1/auditorias', {
+      method: 'POST',
+      headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify(data)
+    });
   }
 
   /* ---------- Paint offer + countdown dates (editable) ---------- */
@@ -115,7 +121,7 @@
     var header = document.getElementById('header');
     if (!header) return;
     var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 40); };
-    onScroll();
+    // (sin llamada inicial: leer scrollY al arrancar obliga a recalcular toda la página)
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
@@ -162,7 +168,8 @@
     var form = document.getElementById('lunaForm');
     var input = document.getElementById('lunaInput');
 
-    function scrollBottom() { var p = document.getElementById('chatBody'); if (p) p.scrollTop = p.scrollHeight; }
+    // Baja al final sin medir la altura (un número grande evita recalcular la página)
+    function scrollBottom() { var p = document.getElementById('chatBody'); if (p) p.scrollTop = 1e6; }
 
     function addBubble(type, text, delay) {
       return new Promise(function (res) {
@@ -285,12 +292,8 @@
         if (!w) window.location.href = waUrl;
       };
 
-      if (sb) {
-        sb.from('auditorias').insert([data]).then(done, done);
-        setTimeout(done, 3500); // si la base tarda o falla, igual sigue a WhatsApp
-      } else {
-        done();
-      }
+      guardarLead(data).then(done, done);
+      setTimeout(done, 3500); // si la base tarda o falla, igual sigue a WhatsApp
     });
   }
 
@@ -342,20 +345,10 @@
     initAuditForm();
     initWaFloat();
 
-    // Contenido editable desde CMS (best-effort)
-    loadSupabase().then(function (lib) {
-      if (lib) { try { sb = lib.createClient(SB_URL, SB_KEY); } catch (_) { sb = null; } }
-      if (!sb) return;
-      Promise.all([
-        fetchSection('oferta'),
-        fetchSection('courses'),
-        fetchSection('config')
-      ]).then(function (res) {
-        paintOffer(res[0]);
-        paintCourses(res[1]);
-        updateConfig(res[2]);
-      }).catch(function () {});
-    });
+    // Contenido editable desde el admin: se pide cuando la página ya cargó (no compite con la carga)
+    var diferido = function () { setTimeout(cargarContenido, 200); };
+    if (document.readyState === 'complete') diferido();
+    else window.addEventListener('load', diferido);
   }
 
   if (document.readyState === 'loading') {
@@ -440,5 +433,4 @@
       m.classList.toggle('is-paused', !visible);
     }).observe(m);
   }
-  pedir();
 })();
