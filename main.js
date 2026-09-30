@@ -252,25 +252,44 @@
         created_at: new Date().toISOString()
       };
 
-      var done = function (ok) {
-        if (ok) {
-          if (msg) { msg.textContent = '¡Listo! Te contactaremos pronto por WhatsApp.'; msg.className = 'audit-msg success'; }
-          form.reset();
-          var waText = encodeURIComponent('Hola, acabo de solicitar la auditoría gratis desde la web. Soy ' + data.nombre + '.');
-          setTimeout(function () { window.open('https://wa.me/' + WA_NUM + '?text=' + waText, '_blank'); }, 1000);
-        } else {
-          if (msg) { msg.textContent = 'Error al enviar. Intenta de nuevo o escríbenos por WhatsApp.'; msg.className = 'audit-msg error'; }
+      // Número actual (el admin puede cambiarlo) y mensaje con los datos:
+      // así el lead llega a WhatsApp aunque la base de datos falle
+      var enlace = document.querySelector('a[href*="wa.me/"]');
+      var num = (enlace && (enlace.href.match(/wa\.me\/(\d+)/) || [])[1]) || WA_NUM;
+      var waUrl = 'https://wa.me/' + num + '?text=' + encodeURIComponent(
+        'Hola, solicito la AUDITORÍA GRATIS desde la web.\n' +
+        '• Nombre: ' + data.nombre + '\n' +
+        '• Negocio: ' + data.tipo_negocio +
+        (data.freno ? '\n• Qué me frena: ' + data.freno : ''));
+
+      var terminado = false;
+      var done = function () {
+        if (terminado) return;
+        terminado = true;
+        if (msg) {
+          // Mensaje + botón visible por si el navegador bloquea la apertura automática
+          msg.className = 'audit-msg success';
+          msg.textContent = '¡Listo! Te llevamos a WhatsApp… ';
+          var a = document.createElement('a');
+          a.href = waUrl; a.target = '_blank'; a.rel = 'noopener';
+          a.className = 'btn btn-wa'; a.style.marginTop = '10px';
+          a.textContent = 'Abrir WhatsApp';
+          msg.appendChild(document.createElement('br'));
+          msg.appendChild(a);
         }
+        form.reset();
         if (btn) btn.disabled = false;
         if (textEl) textEl.textContent = '⚡ SOLICITAR MI AUDITORÍA GRATIS';
+        // Pestaña nueva; si el navegador la bloquea, se abre en la misma
+        var w = window.open(waUrl, '_blank');
+        if (!w) window.location.href = waUrl;
       };
 
       if (sb) {
-        sb.from('auditorias').insert([data])
-          .then(function (r) { done(!r.error); })
-          .catch(function () { done(false); });
+        sb.from('auditorias').insert([data]).then(done, done);
+        setTimeout(done, 3500); // si la base tarda o falla, igual sigue a WhatsApp
       } else {
-        done(true); // sin backend: sigue a WhatsApp
+        done();
       }
     });
   }
