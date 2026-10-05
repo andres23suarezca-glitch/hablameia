@@ -202,31 +202,61 @@
       runScript();
     }
 
-    // Interacción: el usuario le escribe a Luna
+    // Interacción: el usuario le escribe a Luna. Responde la IA real: el mismo motor que atiende WhatsApp.
     if (form && input) {
-      var replies = [
-        '¡Genial! 🙌 Un asesor confirma los detalles enseguida.',
-        '¡Claro que sí! 😊 ¿Quieres que te agende una cita o te paso el catálogo?',
-        '¡Con gusto! Cuéntame un poco más y te ayudo al instante.',
-        'Perfecto ✅ Ya lo registré. ¿Algo más en lo que te ayude?',
-        '¡Buenísimo! 🚀 Te muestro las opciones disponibles ahora mismo.'
-      ];
-      var ri = 0;
+      var LUNA_API = 'https://motor-hablame-production.up.railway.app/chat/web/mensaje';
+      var RESPALDO = 'Uy, ahora no pude responderte 🙈 Escríbeme por WhatsApp al +57 317 073 1171 y seguimos.';
+      var sesion = null;
+      try { sesion = sessionStorage.getItem('luna_sesion'); } catch (err) { /* sin almacenamiento */ }
+      if (!sesion) {
+        sesion = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+          : (Date.now().toString(36) + '-' + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2));
+        try { sessionStorage.setItem('luna_sesion', sesion); } catch (err) { /* sin almacenamiento */ }
+      }
+
+      // *negrita* de WhatsApp → <strong>, siempre como texto (nunca HTML).
+      function pintarTexto(nodo, texto) {
+        texto.split(/\*([^*\n]+)\*/).forEach(function (parte, i) {
+          if (i % 2) { var s = document.createElement('strong'); s.textContent = parte; nodo.appendChild(s); }
+          else nodo.appendChild(document.createTextNode(parte));
+        });
+      }
+
+      var ocupado = false;
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         var text = input.value.trim();
-        if (!text) return;
+        if (!text || ocupado) return;
+        ocupado = true;
         input.value = '';
         addBubble('client', text, 0).then(function () {
           var typing = document.createElement('div');
           typing.className = 'chat-typing';
           typing.innerHTML = '<span></span><span></span><span></span>';
           body.appendChild(typing); scrollBottom();
-          setTimeout(function () {
-            typing.remove();
-            addBubble('luna', replies[ri % replies.length], 0);
-            ri++;
-          }, 1100);
+
+          var control = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          var reloj = setTimeout(function () { if (control) control.abort(); }, 30000);
+          fetch(LUNA_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sesion: sesion, texto: text.slice(0, 500) }),
+            signal: control ? control.signal : undefined
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (d) { return (d && d.respuesta) || RESPALDO; })
+            .catch(function () { return RESPALDO; })
+            .then(function (respuesta) {
+              clearTimeout(reloj);
+              typing.remove();
+              var b = document.createElement('div');
+              b.className = 'chat-bubble chat-bubble--luna';
+              b.style.whiteSpace = 'pre-line';
+              pintarTexto(b, respuesta);
+              body.appendChild(b);
+              requestAnimationFrame(function () { b.classList.add('show'); scrollBottom(); });
+              ocupado = false;
+            });
         });
       });
     }
