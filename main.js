@@ -51,6 +51,24 @@
     if (bar && d.disponibles != null && d.total) {
       bar.style.width = Math.max(0, Math.min(100, Math.round((d.disponibles / d.total) * 100))) + '%';
     }
+    actualizarDias();
+  }
+
+  /* ---------- "Quedan X días": se calcula desde la fecha de cierre ("30 de noviembre") ---------- */
+  var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  function actualizarDias() {
+    var f = document.getElementById('offerFecha'), out = document.getElementById('offerDays');
+    if (!f || !out) return;
+    var m = f.textContent.toLowerCase().match(/(\d{1,2})\s+de\s+([a-z]+)/);
+    var mes = m ? MESES.indexOf(m[2]) : -1;
+    if (mes < 0) { out.hidden = true; return; }
+    var hoy = new Date(), cierre = new Date(hoy.getFullYear(), mes, +m[1], 23, 59, 59);
+    var dias = Math.ceil((cierre - hoy) / 864e5);
+    if (dias < 0 || dias > 120) { out.hidden = true; return; }   // fecha vencida o muy lejana: no se muestra
+    out.textContent = '';
+    if (dias <= 1) { out.textContent = '¡Último día!'; }
+    else { out.appendChild(document.createTextNode('Quedan ')); var s = document.createElement('strong'); s.textContent = dias; out.appendChild(s); out.appendChild(document.createTextNode(' días')); }
+    out.hidden = false;
   }
 
   function paintCourses(list) {
@@ -143,6 +161,15 @@
     var track = document.getElementById('carouselTrack');
     if (!track) return;
     var paused = reduceMotion;
+    // Flechas: mueven una tarjeta y pausan el avance automático
+    var paso = function (dir) {
+      var first = track.firstElementChild;
+      paused = true;
+      track.scrollBy({ left: dir * (first ? first.offsetWidth + 22 : 350), behavior: reduceMotion ? 'auto' : 'smooth' });
+    };
+    var prev = document.getElementById('carPrev'), next = document.getElementById('carNext');
+    if (prev) prev.addEventListener('click', function () { paso(-1); });
+    if (next) next.addEventListener('click', function () { paso(1); });
     track.addEventListener('mouseenter', function () { paused = true; });
     track.addEventListener('mouseleave', function () { if (!reduceMotion) paused = false; });
     track.addEventListener('touchstart', function () { paused = true; }, { passive: true });
@@ -366,6 +393,7 @@
   function boot() {
     // Interacciones (no dependen de red)
     initHeroVideo();
+    actualizarDias();
     initHeader();
     initMobileMenu();
     initReveal();

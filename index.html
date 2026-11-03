@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="favicon.ico?v=2" sizes="any">
+  <link rel="icon" type="image/png" href="favicon.png?v=2">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
   <title>Hablame.IA &mdash; Automatiza, vende y crece con Inteligencia Artificial | Colombia</title>
   <meta name="description" content="Automatizaciones, agentes de IA y soluciones para marketing, ventas, atenci&oacute;n al cliente y gesti&oacute;n interna. Adem&aacute;s, formaci&oacute;n pr&aacute;ctica en IA para equipos y emprendedores en Colombia.">
   <meta name="theme-color" content="#FAF7F2">
@@ -18,12 +18,12 @@
   <meta property="og:locale" content="es_CO">
   <meta property="og:site_name" content="Hablame.IA">
   <meta property="og:url" content="https://hablame-ia.com/">
-  <meta property="og:image" content="https://hablame-ia.com/assets/img/og-hablame.jpg">
+  <meta property="og:image" content="https://hablame-ia.com/assets/img/og-hablame-v2.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Mascota de Hablame.IA: automatiza, vende y crece con Inteligencia Artificial">
+  <meta property="og:image:alt" content="Mascota de Hablame.IA: tu negocio vende 24/7 con Inteligencia Artificial">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://hablame-ia.com/assets/img/og-hablame.jpg">
+  <meta name="twitter:image" content="https://hablame-ia.com/assets/img/og-hablame-v2.jpg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
 <header class="header" id="header">
   <div class="header-inner">
     <a href="#top" class="header-logo">
-      <span class="header-logo-icon">&#x1F4AC;</span>
+      <img class="header-logo-icon" src="assets/img/logo-mascota.webp" alt="" width="34" height="34">
       <span>Hablame</span><span class="header-logo-dot"></span><span class="header-logo-ia">IA</span>
     </a>
     <nav class="header-nav">
@@ -81,12 +81,12 @@
         <div class="mascota-float">
           <span class="mascota-glow" aria-hidden="true"></span>
           <picture class="mascota-pose is-on" data-pose="frente">
-            <source type="image/webp" srcset="assets/img/mascota/mascota-frente-400.webp 400w, assets/img/mascota/mascota-frente-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
-            <img src="assets/img/mascota/mascota-frente.png" alt="Mascota de Hablame.IA" width="800" height="752" fetchpriority="high">
+            <source type="image/webp" srcset="assets/img/mascota/mascota-naranja-frente-400.webp 400w, assets/img/mascota/mascota-naranja-frente-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
+            <img src="assets/img/mascota/mascota-naranja-frente.png" alt="Mascota de Hablame.IA" width="800" height="752" fetchpriority="high">
           </picture>
           <picture class="mascota-pose" data-pose="arriba" aria-hidden="true">
-            <source type="image/webp" data-srcset="assets/img/mascota/mascota-arriba-400.webp 400w, assets/img/mascota/mascota-arriba-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
-            <img data-src="assets/img/mascota/mascota-arriba.png" alt="" width="800" height="752">
+            <source type="image/webp" data-srcset="assets/img/mascota/mascota-naranja-arriba-400.webp 400w, assets/img/mascota/mascota-naranja-arriba-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
+            <img data-src="assets/img/mascota/mascota-naranja-arriba.png" alt="" width="800" height="752">
           </picture>
           <!-- Pose "abajo" pendiente: cuando llegue, copia el bloque de "arriba" con data-pose="abajo" -->
         </div>
@@ -94,11 +94,15 @@
       <span class="mascota-shadow" aria-hidden="true"></span>
     </div>
 
-    <div class="kicker reveal"><span class="kicker-dot"></span>HABLAME.IA &middot; Inteligencia Artificial &middot; Colombia</div>
+    <div class="kicker reveal"><span class="kicker-dot"></span>Automatizaci&oacute;n con IA &middot; Colombia</div>
 
+    <!-- Titular corto orientado al resultado (3 niveles de tamaño/color) -->
     <h1 class="hero-title reveal">
-      &iquest;Est&aacute;s listo para dejar de usar mal la &laquo;IA&raquo; y empezar a usarla para <span class="hl">automatizar, vender y crecer</span> tu negocio?
+      <span class="ht-pre">Tu negocio</span>
+      <span class="ht-big"><span class="ht-grad">vende</span> <span class="ht-247">24/7</span></span>
+      <span class="ht-post">con <span class="hl">Inteligencia Artificial</span></span>
     </h1>
+    <p class="hero-sub reveal">Agentes de IA que <strong>atienden, agendan y cierran ventas</strong> por WhatsApp, sin contratar m&aacute;s personal.</p>
 
     <!-- BOTONES -->
     <div class="hero-buttons reveal">
@@ -119,31 +123,46 @@
       </video>
     </div>
 
-    <!-- PÁRRAFO -->
+    <!-- PÁRRAFO (corto) -->
     <p class="hero-lead reveal">
-      Dise&ntilde;amos automatizaciones, agentes de IA y soluciones para marketing, ventas, atenci&oacute;n al cliente y gesti&oacute;n interna; adem&aacute;s, formamos equipos y emprendedores para que aprendan a utilizar la IA con una metodolog&iacute;a pr&aacute;ctica, aplicable y orientada a resultados.
+      Tambi&eacute;n creamos <strong>contenido, publicidad y p&aacute;ginas web</strong> con IA, y formamos a tu equipo para que la domine.
     </p>
 
-    <!-- FIRMA -->
-    <div class="hero-signature reveal">
-      <span class="hero-signature-name">Ing. Andr&eacute;s Su&aacute;rez C.</span> &mdash; Ingeniero Industrial, especialista en Gerencia Financiera y en Gerencia en Salud. De la l&iacute;nea de producci&oacute;n al agente de IA: automatizaci&oacute;n para hospitales, inmobiliarias, gastronom&iacute;a, colegios, concesionarios y m&aacute;s en Colombia.
+    <!-- CONFIANZA: quiénes están detrás -->
+    <div class="trust reveal">
+      <p class="trust-label">Qui&eacute;nes estamos detr&aacute;s</p>
+      <p class="trust-title">Un equipo de <strong>ingenieros</strong> que convierte la IA en resultados medibles</p>
+      <ul class="trust-chips">
+        <li>Ingenier&iacute;a Industrial</li>
+        <li>Especializaci&oacute;n en Gerencia Financiera</li>
+        <li>Especializaci&oacute;n en Gerencia en Salud</li>
+      </ul>
+      <p class="trust-line">De la l&iacute;nea de producci&oacute;n al agente de IA: soluciones implementadas en hospitales, inmobiliarias, restaurantes, colegios, concesionarios y textileras de Colombia.</p>
+      <p class="trust-checks"><span>Diagn&oacute;stico gratis antes de cotizar</span><span>Tus datos protegidos (Ley 1581)</span><span>Hablas directo con un ingeniero</span></p>
     </div>
   </div>
 </section>
 
 <!-- ============ BANDA DE OFERTA ============ -->
 <section class="offer" id="offerBand">
+  <!-- Marca de agua de la franja (texto CSS, 0 KB) -->
+  <span class="offer-watermark" aria-hidden="true">LANZAMIENTO &middot; HABLAME.IA &middot; LANZAMIENTO &middot; HABLAME.IA &middot; LANZAMIENTO &middot; HABLAME.IA &middot; LANZAMIENTO</span>
   <span class="offer-spark offer-spark--1" aria-hidden="true"></span>
   <span class="offer-spark offer-spark--2" aria-hidden="true"></span>
   <div class="container">
-    <div class="offer-inner">
-      <span class="offer-flame">&#x1F525;</span>
-      <span class="offer-text">NUESTRA OFERTA DE LANZAMIENTO EST&Aacute; A PUNTO DE FINALIZAR</span>
-      <span class="offer-deadline">Cierra el <strong id="offerFecha">31 de agosto</strong></span>
-    </div>
-    <div class="offer-cupos">
-      <span class="offer-cupos-count"><strong id="cuposDisp">3</strong> de <strong id="cuposTotal">15</strong> cupos en academia disponibles</span>
-      <span class="offer-bar"><span class="offer-bar-fill" id="cuposBarFill" style="width:20%;"></span></span>
+    <div class="offer-card">
+      <div class="offer-head">
+        <span class="offer-badge">&#x1F525; Precio de lanzamiento</span>
+        <p class="offer-text">NUESTRA OFERTA DE LANZAMIENTO EST&Aacute; A PUNTO DE FINALIZAR</p>
+      </div>
+      <div class="offer-meta">
+        <span class="offer-deadline">Cierra el <strong id="offerFecha">30 de noviembre</strong></span>
+        <span class="offer-days" id="offerDays" hidden></span>
+      </div>
+      <div class="offer-cupos">
+        <div class="offer-cupos-top"><span>Cupos en academia</span><span><strong id="cuposDisp">3</strong> de <strong id="cuposTotal">15</strong> disponibles</span></div>
+        <span class="offer-bar" role="img" aria-label="Cupos disponibles"><span class="offer-bar-fill" id="cuposBarFill" style="width:20%;"></span></span>
+      </div>
     </div>
   </div>
 </section>
@@ -159,36 +178,37 @@
       <div class="pain-card" data-pain>
         <div class="pain-num">01</div>
         <div class="pain-body">
-          <h3>Tus clientes escriben y nadie responde a tiempo.</h3>
-          <p>Cada mensaje sin contestar en minutos es una venta que se lleva la competencia &mdash; de noche, fines de semana, hora pico.</p>
-          <span class="pain-tag">&rarr; Agente IA en WhatsApp</span>
+          <h3>Te escriben&hellip; y nadie responde.</h3>
+          <p>Cada mensaje sin contestar es una venta que se lleva tu competencia: de noche, fines de semana y en hora pico.</p>
+          <a href="#empresas" class="pain-tag">Soluci&oacute;n: Agente IA en WhatsApp &rarr;</a>
         </div>
       </div>
       <div class="pain-card" data-pain>
         <div class="pain-num">02</div>
         <div class="pain-body">
-          <h3>Sabes que tienes que publicar, pero no tienes tiempo ni equipo.</h3>
-          <p>Tus redes est&aacute;n abandonadas mientras tu competencia aparece todos los d&iacute;as frente a tus clientes.</p>
-          <span class="pain-tag">&rarr; Contenido con IA</span>
+          <h3>Sabes que debes publicar, pero no te da la vida.</h3>
+          <p>Tus redes se ven abandonadas mientras tu competencia aparece todos los d&iacute;as frente a tus clientes.</p>
+          <a href="#empresas" class="pain-tag">Soluci&oacute;n: Contenido con IA &rarr;</a>
         </div>
       </div>
       <div class="pain-card" data-pain>
         <div class="pain-num">03</div>
         <div class="pain-body">
-          <h3>Inviertes en publicidad y no sabes si te funciona.</h3>
-          <p>Pones plata en Meta y solo ves gastos, no clientes. Sin estrategia, cada peso es una apuesta a ciegas.</p>
-          <span class="pain-tag">&rarr; Publicidad con IA</span>
+          <h3>Pagas publicidad y no ves clientes.</h3>
+          <p>Sin estrategia, cada peso que pones en Meta es una apuesta a ciegas que se va en gastos.</p>
+          <a href="#empresas" class="pain-tag">Soluci&oacute;n: Publicidad con IA &rarr;</a>
         </div>
       </div>
       <div class="pain-card" data-pain>
         <div class="pain-num">04</div>
         <div class="pain-body">
-          <h3>Te buscan y no apareces &mdash; o apareces con algo que no vende.</h3>
-          <p>Sin web, o con una lenta y vieja, pierdes credibilidad frente a quien s&iacute; la tiene.</p>
-          <span class="pain-tag">&rarr; Web que convierte</span>
+          <h3>Te buscan en internet y no apareces.</h3>
+          <p>Sin web, o con una lenta y vieja, pierdes la confianza del cliente antes de que te escriba.</p>
+          <a href="#empresas" class="pain-tag">Soluci&oacute;n: Web que convierte &rarr;</a>
         </div>
       </div>
     </div>
+    <p class="pains-close reveal">La buena noticia: <strong>los 4 tienen soluci&oacute;n.</strong> <a href="#empresas">Mira c&oacute;mo &darr;</a></p>
   </div>
 </section>
 
@@ -325,8 +345,8 @@
           <div class="mascota-mini" aria-hidden="true">
             <span class="mascota-glow"></span>
             <picture>
-              <source type="image/webp" srcset="assets/img/mascota/mascota-frente-400.webp 400w, assets/img/mascota/mascota-frente-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
-              <img src="assets/img/mascota/mascota-frente.png" alt="" width="800" height="752" loading="lazy">
+              <source type="image/webp" srcset="assets/img/mascota/mascota-naranja-frente-400.webp 400w, assets/img/mascota/mascota-naranja-frente-800.webp 800w" sizes="(max-width: 768px) 213px, 340px">
+              <img src="assets/img/mascota/mascota-naranja-frente.png" alt="" width="800" height="752" loading="lazy">
             </picture>
           </div>
           <div class="phone-notch"></div>
@@ -426,6 +446,10 @@
       <h2>Lo que dicen quienes ya <span class="hl">automatizaron con IA.</span></h2>
     </div>
 
+    <div class="carousel-nav">
+      <button type="button" class="carousel-btn" id="carPrev" aria-label="Testimonio anterior">&larr;</button>
+      <button type="button" class="carousel-btn" id="carNext" aria-label="Siguiente testimonio">&rarr;</button>
+    </div>
     <div class="carousel-track" id="carouselTrack">
 
       <!-- 1 WA — Odontología -->
@@ -433,14 +457,14 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-1.webp" alt="Cristina Obando" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>Cristina Obando</strong><span>en l&iacute;nea</span></div>
-          <div class="chat-head-icons">&#x1F4F9; &#x1F4DE;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
         </div>
         <div class="chat-body">
           <span class="chat-day">HOY</span>
-          <div class="wa-in">Desde que Andr&eacute;s implement&oacute; el agente de IA, el seguimiento de pacientes se hace solo: agenda las citas de forma natural y ya no tenemos huecos en la agenda. Pasamos a estar llenos. Un genio.<span class="wa-time">11:42</span></div>
+          <div class="wa-in">Desde que Andr&eacute;s implement&oacute; el agente de IA, el seguimiento de pacientes se hace solo: agenda las citas de forma natural y <strong>ya no tenemos huecos en la agenda</strong>. Pasamos a estar llenos. Un genio.<span class="wa-time">11:42</span></div>
           <div class="wa-out">&#x1F64C; &iexcl;Gracias, Cristina!<span class="wa-time">11:43 <span class="wa-check">&#x2713;&#x2713;</span></span></div>
         </div>
-        <div class="chat-tag">Cl&iacute;nica odontol&oacute;gica</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Cl&iacute;nica odontol&oacute;gica</span><span class="chat-result">Agenda llena</span></div>
       </article>
 
       <!-- 2 WA — Inmobiliaria -->
@@ -448,14 +472,14 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-2.webp" alt="Santiago Ruiz" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>Santiago Ruiz</strong><span>en l&iacute;nea</span></div>
-          <div class="chat-head-icons">&#x1F4F9; &#x1F4DE;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
         </div>
         <div class="chat-body">
           <span class="chat-day">HOY</span>
-          <div class="wa-in">Nunca imagin&eacute; resultados tan r&aacute;pidos. Los clientes escriben y la IA los atiende al instante, les perfila las propiedades y los deja listos para cerrar. No se nos escapa un solo lead, ni en la madrugada.<span class="wa-time">09:15</span></div>
+          <div class="wa-in">Nunca imagin&eacute; resultados tan r&aacute;pidos. Los clientes escriben y la IA los atiende al instante, les perfila las propiedades y los deja listos para cerrar. <strong>No se nos escapa un solo lead</strong>, ni en la madrugada.<span class="wa-time">09:15</span></div>
           <div class="wa-out">&#x1F680; &iexcl;A cerrar ventas!<span class="wa-time">09:16 <span class="wa-check">&#x2713;&#x2713;</span></span></div>
         </div>
-        <div class="chat-tag">Inmobiliaria</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Inmobiliaria</span><span class="chat-result">Cero leads perdidos</span></div>
       </article>
 
       <!-- 3 WA — Concesionario -->
@@ -463,14 +487,14 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-3.webp" alt="Christian O&ntilde;ate" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>Christian O&ntilde;ate</strong><span>en l&iacute;nea</span></div>
-          <div class="chat-head-icons">&#x1F4F9; &#x1F4DE;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
         </div>
         <div class="chat-body">
           <span class="chat-day">HOY</span>
-          <div class="wa-in">La combinaci&oacute;n de atenci&oacute;n con IA y la pauta que nos mont&oacute; fue una bomba. Los clientes llegan interesados y la atenci&oacute;n automatizada los enamora de una. El equipo de ventas est&aacute; feliz con las comisiones.<span class="wa-time">18:30</span></div>
+          <div class="wa-in">La combinaci&oacute;n de atenci&oacute;n con IA y la pauta que nos mont&oacute; <strong>fue una bomba</strong>. Los clientes llegan interesados y la atenci&oacute;n automatizada los enamora de una. El equipo de ventas est&aacute; feliz con las comisiones.<span class="wa-time">18:30</span></div>
           <div class="wa-out">&#x1F697;&#x1F4A8; &iexcl;A otro nivel!<span class="wa-time">18:31 <span class="wa-check">&#x2713;&#x2713;</span></span></div>
         </div>
-        <div class="chat-tag">Concesionario</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Concesionario</span><span class="chat-result">M&aacute;s ventas</span></div>
       </article>
 
       <!-- 4 WA — Meta Ads -->
@@ -478,14 +502,14 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-4.webp" alt="Luz Castillo" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>Luz Castillo</strong><span>en l&iacute;nea</span></div>
-          <div class="chat-head-icons">&#x1F4F9; &#x1F4DE;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
         </div>
         <div class="chat-body">
           <span class="chat-day">HOY</span>
-          <div class="wa-in">Tuvimos que pausar la pauta un d&iacute;a por la cantidad de clientes que llegaron. Nunca hab&iacute;a visto resultados as&iacute; en Meta: gente interesada y bien perfilada. Me devolvi&oacute; la ilusi&oacute;n en el negocio.<span class="wa-time">14:07</span></div>
+          <div class="wa-in"><strong>Tuvimos que pausar la pauta un d&iacute;a</strong> por la cantidad de clientes que llegaron. Nunca hab&iacute;a visto resultados as&iacute; en Meta: gente interesada y bien perfilada. Me devolvi&oacute; la ilusi&oacute;n en el negocio.<span class="wa-time">14:07</span></div>
           <div class="wa-out">&#x1F929; &iexcl;A escalar!<span class="wa-time">14:08 <span class="wa-check">&#x2713;&#x2713;</span></span></div>
         </div>
-        <div class="chat-tag">Campa&ntilde;as Meta Ads</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Campa&ntilde;as Meta Ads</span><span class="chat-result">Pauta rentable</span></div>
       </article>
 
       <!-- 5 WA — Producción -->
@@ -493,14 +517,14 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-5.webp" alt="Fernando Caiza" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>Fernando Caiza</strong><span>en l&iacute;nea</span></div>
-          <div class="chat-head-icons">&#x1F4F9; &#x1F4DE;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
         </div>
         <div class="chat-body">
           <span class="chat-day">HOY</span>
-          <div class="wa-in">Antes todo era manual y un caos. Con las automatizaciones que cre&oacute; para producci&oacute;n y contabilidad, la empresa funciona como un reloj. Redujimos errores a cero y todo cuadra a fin de mes. Por fin duermo tranquilo.<span class="wa-time">20:52</span></div>
+          <div class="wa-in">Antes todo era manual y un caos. Con las automatizaciones que cre&oacute; para producci&oacute;n y contabilidad, la empresa funciona como un reloj. <strong>Redujimos errores a cero</strong> y todo cuadra a fin de mes. Por fin duermo tranquilo.<span class="wa-time">20:52</span></div>
           <div class="wa-out">&#x2699;&#xFE0F; &iexcl;Como un reloj!<span class="wa-time">20:53 <span class="wa-check">&#x2713;&#x2713;</span></span></div>
         </div>
-        <div class="chat-tag">Producci&oacute;n y contabilidad</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Producci&oacute;n y contabilidad</span><span class="chat-result">Errores en cero</span></div>
       </article>
 
       <!-- 6 WA — Software -->
@@ -508,14 +532,14 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-6.webp" alt="Miguel Guerrero" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>Miguel Guerrero</strong><span>en l&iacute;nea</span></div>
-          <div class="chat-head-icons">&#x1F4F9; &#x1F4DE;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
         </div>
         <div class="chat-body">
           <span class="chat-day">HOY</span>
-          <div class="wa-in">El software que nos cre&oacute; es una maravilla. Controlar a los vendedores y hacer seguimiento de clientes era un dolor de cabeza; ahora tengo todo en tiempo real en el celular. El equipo est&aacute; m&aacute;s motivado y las m&eacute;tricas, clar&iacute;simas.<span class="wa-time">10:24</span></div>
+          <div class="wa-in">El software que nos cre&oacute; es una maravilla. Controlar a los vendedores y hacer seguimiento de clientes era un dolor de cabeza; <strong>ahora tengo todo en tiempo real</strong> en el celular. El equipo est&aacute; m&aacute;s motivado y las m&eacute;tricas, clar&iacute;simas.<span class="wa-time">10:24</span></div>
           <div class="wa-out">&#x1F4F1; &iexcl;Todo bajo control!<span class="wa-time">10:25 <span class="wa-check">&#x2713;&#x2713;</span></span></div>
         </div>
-        <div class="chat-tag">Distribuci&oacute;n tienda a tienda</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Distribuci&oacute;n tienda a tienda</span><span class="chat-result">Control en tiempo real</span></div>
       </article>
 
       <!-- 7 IG — Hospital PAMEC -->
@@ -523,13 +547,13 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-7.webp" alt="S. Pantoja" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>s.pantoja</strong><span>Hospital</span></div>
-          <div class="chat-head-icons">&hellip;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01" stroke-linecap="round"/></svg></div>
         </div>
         <div class="chat-body">
-          <div class="ig-msg">El sistema que desarroll&oacute; para el PAMEC y la auditor&iacute;a interna fue la pieza que nos faltaba. Organiz&oacute; todo de tal forma que recibir la certificaci&oacute;n ISO 9001 fue un proceso fluido y sin estr&eacute;s. La junta qued&oacute; feliz.</div>
+          <div class="ig-msg">El sistema que desarroll&oacute; para el PAMEC y la auditor&iacute;a interna fue la pieza que nos faltaba. Organiz&oacute; todo de tal forma que <strong>recibir la certificaci&oacute;n ISO 9001 fue un proceso fluido</strong> y sin estr&eacute;s. La junta qued&oacute; feliz.</div>
           <div class="ig-react">&#x2764;&#xFE0F; &#x1F44F;</div>
         </div>
-        <div class="chat-tag">Instagram &middot; Mensaje directo</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Hospital &middot; Instagram</span><span class="chat-result">ISO 9001 sin estr&eacute;s</span></div>
       </article>
 
       <!-- 8 IG — Hospital acreditación -->
@@ -537,13 +561,13 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-8.webp" alt="Angela Bastidas" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>angela.bastidas</strong><span>Hospital</span></div>
-          <div class="chat-head-icons">&hellip;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01" stroke-linecap="round"/></svg></div>
         </div>
         <div class="chat-body">
-          <div class="ig-msg">El nivel de exigencia era alt&iacute;simo, pero sus automatizaciones nos quitaron un peso enorme. Procesos que tomaban semanas ahora se hacen en segundos y con precisi&oacute;n absoluta. Logramos la acreditaci&oacute;n. Marc&oacute; un antes y un despu&eacute;s.</div>
+          <div class="ig-msg">El nivel de exigencia era alt&iacute;simo, pero sus automatizaciones nos quitaron un peso enorme. Procesos que tomaban semanas ahora se hacen en segundos y con precisi&oacute;n absoluta. <strong>Logramos la acreditaci&oacute;n.</strong> Marc&oacute; un antes y un despu&eacute;s.</div>
           <div class="ig-react">&#x2764;&#xFE0F; &#x1F929;</div>
         </div>
-        <div class="chat-tag">Instagram &middot; Mensaje directo</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Hospital &middot; Instagram</span><span class="chat-result">Acreditaci&oacute;n lograda</span></div>
       </article>
 
       <!-- 9 IG — Hospital call center -->
@@ -551,13 +575,13 @@
         <div class="chat-head">
           <div class="chat-av"><img src="assets/client-9.webp" alt="Equipo de Atenci&oacute;n" loading="lazy" width="42" height="42"></div>
           <div class="chat-meta"><strong>atencion.hospital</strong><span>Hospital</span></div>
-          <div class="chat-head-icons">&hellip;</div>
+          <div class="chat-head-icons" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01" stroke-linecap="round"/></svg></div>
         </div>
         <div class="chat-body">
-          <div class="ig-msg">El nuevo sistema de call center es de otro mundo. Antes, gestionar quejas y reclamos era agotador; ahora la atenci&oacute;n es inmediata y trazable. Los usuarios se sienten escuchados y nosotros tenemos todo organizado.</div>
+          <div class="ig-msg">El nuevo sistema de call center es de otro mundo. Antes, gestionar quejas y reclamos era agotador; ahora <strong>la atenci&oacute;n es inmediata y trazable</strong>. Los usuarios se sienten escuchados y nosotros tenemos todo organizado.</div>
           <div class="ig-react">&#x2764;&#xFE0F; &#x1F64C;</div>
         </div>
-        <div class="chat-tag">Instagram &middot; Mensaje directo</div>
+        <div class="chat-foot"><span class="chat-stars" aria-label="5 de 5 estrellas">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="chat-sector">Hospital &middot; Instagram</span><span class="chat-result">Atenci&oacute;n inmediata</span></div>
       </article>
 
     </div>
@@ -580,7 +604,7 @@
         <h3>Tu primer agente de IA en 60 minutos</h3>
         <p>Accede al curso gratuito. Aprende lo b&aacute;sico para montar tu primer agente de WhatsApp con IA.</p>
         <div class="course-price-free">Gratis</div>
-        <a href="#auditoria" class="btn-expert btn-expert--full">Acceder gratis &rarr;</a>
+        <a href="https://wa.me/573170731171?text=Hola%2C%20quiero%20acceder%20al%20curso%20GRATIS%20%22Tu%20primer%20agente%20de%20IA%20en%2060%20minutos%22." target="_blank" rel="noopener" class="btn-expert btn-expert--full" aria-label="Pedir acceso gratis por WhatsApp al curso Tu primer agente de IA">Quiero el curso gratis &rarr;</a>
       </div>
 
       <!-- CURSO 2 — $127.000 -->
@@ -592,7 +616,8 @@
           <span class="course-price-old"><span class="price-antes">Antes</span>$197.000</span>
           <span class="course-price-now"><span class="price-ahora">Ahora</span><span class="course-price-amount">$127.000 <span class="cur">COP</span></span></span>
         </div>
-        <a href="curso-contenido-viral.html" class="btn-expert btn-expert--full" aria-label="Ver el curso Crea tu propio contenido viral">Ver el curso &rarr;</a>
+        <a href="https://wa.me/573170731171?text=Hola%2C%20quiero%20inscribirme%20en%20el%20curso%20%22Crea%20tu%20propio%20contenido%20viral%22%20%28%24127.000%29." target="_blank" rel="noopener" class="btn-expert btn-expert--full" aria-label="Inscribirme por WhatsApp en el curso Crea tu propio contenido viral">Inscribirme por WhatsApp &rarr;</a>
+        <a href="curso-contenido-viral.html" class="course-more">Ver temario del curso</a>
       </div>
 
       <!-- CURSO 3 — LANZAMIENTO -->
@@ -604,10 +629,32 @@
           <span class="course-price-old"><span class="price-antes">Antes</span>$250.000</span>
           <span class="course-price-now"><span class="price-ahora">Ahora</span><span class="course-price-amount">$120.000 <span class="cur">COP</span></span></span>
         </div>
-        <div class="course-countdown">Precio de lanzamiento hasta el <strong id="countdownFecha">31 de agosto</strong></div>
-        <a href="curso-todo-ia.html" class="btn-expert btn-expert--full" aria-label="Ver el curso Todo sobre IA en 1">Ver el curso &rarr;</a>
+        <div class="course-countdown">Precio de lanzamiento hasta el <strong id="countdownFecha">30 de noviembre</strong></div>
+        <a href="https://wa.me/573170731171?text=Hola%2C%20quiero%20inscribirme%20en%20el%20curso%20%22Todo%20sobre%20IA%20en%201%22%20con%20el%20precio%20de%20lanzamiento%20%28%24120.000%29." target="_blank" rel="noopener" class="btn-expert btn-expert--full" aria-label="Inscribirme por WhatsApp en el curso Todo sobre IA en 1">Inscribirme por WhatsApp &rarr;</a>
+        <a href="curso-todo-ia.html" class="course-more">Ver temario del curso</a>
       </div>
 
+    </div>
+
+    <!-- FORMACIÓN A LA MEDIDA: equipos y empresas -->
+    <div class="course-team reveal">
+      <div class="course-team-info">
+        <div class="course-badge course-badge--team">PARA EMPRESAS</div>
+        <h3>Formaci&oacute;n en IA a la medida de <span class="hl">tu equipo</span></h3>
+        <p>Cursos personalizados para que tu equipo trabaje m&aacute;s r&aacute;pido y produzca m&aacute;s con inteligencia artificial, usando los procesos y herramientas reales de tu empresa.</p>
+        <ul class="course-team-list">
+          <li>Diagn&oacute;stico previo de tus procesos</li>
+          <li>Temario hecho para tu sector y tus metas</li>
+          <li>Pr&aacute;ctica con casos reales de tu negocio</li>
+          <li>Para ventas, atenci&oacute;n, administraci&oacute;n o producci&oacute;n</li>
+        </ul>
+      </div>
+      <div class="course-team-cta">
+        <p class="course-team-ask">&iquest;Para qui&eacute;n es la formaci&oacute;n?</p>
+        <a href="https://wa.me/573170731171?text=Hola%2C%20quiero%20un%20curso%20de%20IA%20personalizado%20para%20MI%20EQUIPO%20de%20trabajo%2C%20para%20mejorar%20la%20productividad." target="_blank" rel="noopener" class="btn-expert btn-expert--full" aria-label="Solicitar curso personalizado para mi equipo por WhatsApp">Para mi equipo &rarr;</a>
+        <a href="https://wa.me/573170731171?text=Hola%2C%20quiero%20un%20programa%20de%20formaci%C3%B3n%20en%20IA%20personalizado%20para%20MI%20EMPRESA." target="_blank" rel="noopener" class="btn btn-outline course-team-btn2" aria-label="Solicitar formación personalizada para mi empresa por WhatsApp">Para mi empresa &rarr;</a>
+        <span class="course-team-note">Te respondemos por WhatsApp con una propuesta</span>
+      </div>
     </div>
   </div>
 </section>
@@ -620,7 +667,7 @@
     <div class="footer-grid">
       <div>
         <div class="header-logo" style="font-size:22px;color:#FAF7F2;">
-          <span class="header-logo-icon">&#x1F4AC;</span>
+          <img class="header-logo-icon" src="assets/img/logo-mascota.webp" alt="" width="34" height="34">
           <span>Hablame</span><span class="header-logo-dot"></span><span class="header-logo-ia">IA</span>
         </div>
         <p style="margin:14px 0 0;font-size:14px;line-height:1.55;max-width:320px;">Inteligencia artificial para automatizar, vender y hacer crecer tu negocio en Colombia.</p>
