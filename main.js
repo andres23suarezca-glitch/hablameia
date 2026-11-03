@@ -184,12 +184,12 @@
       });
     }
 
-    // Conversación guionizada al entrar en vista
+    // Conversación guionizada al entrar en vista (la misma Luna de HABLAME IA que responde abajo)
     var scripted = [
-      { t: 'client', m: '¿Atienden mañana a las 3pm?' },
-      { t: 'luna', m: '¡Hola! 😊 Sí, hay turno con Sandra. ¿Te lo agendo?' },
-      { t: 'client', m: 'Sí, por favor' },
-      { t: 'luna', m: '¡Listo! Cita confirmada para mañana 3:00 PM 📅 Te llegará un recordatorio. ¿Algo más?' }
+      { t: 'client', m: 'Hola, ¿hablo con una persona o con un bot?' },
+      { t: 'luna', m: '¡Hola! 😊 Soy Luna, un agente de IA creado por HABLAME IA. Así podría atender a los clientes de tu negocio, a cualquier hora.' },
+      { t: 'client', m: '¿Y qué haría en mi negocio?' },
+      { t: 'luna', m: 'Responde, cotiza, agenda y hace seguimiento por WhatsApp. ¿Te muestro cómo en un diagnóstico gratis de 15 min con Andrés?' }
     ];
     var started = false;
     function runScript() { var d = 0; scripted.forEach(function (msg) { addBubble(msg.t, msg.m, d); d += 900; }); }
