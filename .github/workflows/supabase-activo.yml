@@ -1,0 +1,15 @@
+# Mantiene activa la base de datos de Supabase (el plan gratis la pausa tras ~7 días sin uso).
+# Corre sola cada 3 días; también se puede lanzar a mano desde la pestaña "Actions" de GitHub.
+# Para apagarla: GitHub > Actions > "Mantener Supabase activo" > ... > Disable workflow.
+name: Mantener Supabase activo
+on:
+  schedule:
+    - cron: '0 12 */3 * *'   # cada 3 días, 7:00 a. m. hora Colombia
+  workflow_dispatch:
+jobs:
+  consulta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consultar la base
+        run: |
+          curl -fsS --max-time 30 "https://fnoolbnacifxgppfjsoa.supabase.co/rest/v1/site_content?select=section&limit=1"             -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZub29sYm5hY2lmeGdwcGZqc29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MTU3MzEsImV4cCI6MjA5OTI5MTczMX0.sNfRvqyrP_X5uDedP9j59L2fwLgboIOZSCaZCYBXvPI" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZub29sYm5hY2lmeGdwcGZqc29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MTU3MzEsImV4cCI6MjA5OTI5MTczMX0.sNfRvqyrP_X5uDedP9j59L2fwLgboIOZSCaZCYBXvPI" -o /dev/null -w "Supabase respondió HTTP %{http_code}\n"
