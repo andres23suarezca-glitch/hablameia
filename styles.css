@@ -141,9 +141,10 @@ h3{font-size:clamp(19px,2.6vw,24px);font-weight:700;letter-spacing:-.01em;}
 .header.scrolled{box-shadow:0 2px 22px rgba(26,26,46,.08);border-color:var(--line);}
 .header-inner{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:14px 4%;gap:12px;}
 .header-logo{display:flex;align-items:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:20px;color:var(--ink);}
-.header-logo-icon{display:block;flex-shrink:0;width:32px;height:32px;margin-right:8px;image-rendering:pixelated;filter:drop-shadow(0 3px 6px rgba(20,33,61,.28));}  /* ícono pixel-art (SVG) */
+.header-logo-icon{display:block;flex-shrink:0;width:38px;height:38px;margin-right:10px;filter:drop-shadow(0 3px 7px rgba(36,33,58,.28));}  /* símbolo oficial (SVG vectorial) */
+.logo-word{letter-spacing:.045em;white-space:nowrap;}  /* nombre como en el logo de redes */
 .header-logo-dot{width:6px;height:6px;border-radius:50%;background:var(--brand-orange);display:inline-block;margin:0 1px;vertical-align:middle;}
-.header-logo-ia{color:var(--brand-orange);}
+.header-logo-ia{color:#E8551A;}  /* naranja exacto del logo */
 .header-nav{display:flex;gap:28px;align-items:center;}
 .header-nav a{font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .2s;}
 .header-nav a:hover{color:var(--brand-orange);}

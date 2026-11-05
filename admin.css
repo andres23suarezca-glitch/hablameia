@@ -46,7 +46,6 @@ body {
   justify-content: center;
   width: 48px; height: 48px;
   display: block;
-  image-rendering: pixelated;
 }
 .login-logo-dot {
   display: inline-block;
@@ -318,3 +317,6 @@ body {
   .login-card { padding: 28px 20px; }
   .dash-header-actions { width: 100%; justify-content: flex-end; }
 }
+
+/* Nombre como en el logo oficial */
+.logo-word { letter-spacing: .045em; }
